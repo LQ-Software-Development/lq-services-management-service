@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    ports:
+      - 3000:3000
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: 'npm run start:dev'
+  postgres:
+    image: postgres:16
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - .volumes/pg:/var/lib/postgresql/data
+
+volumes:
+  lq-services-postgres_data:
