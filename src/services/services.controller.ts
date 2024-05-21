@@ -3,7 +3,7 @@ import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CreateServicesService } from './services/create-services.service';
 import { FetchServicesService } from './services/fetch-services.service';
 import { CreateServicesDto } from './dto/create-services.dto';
-import { QueryPaginationDto } from '../../src/interfaces/query-pagination.dto';
+import { QueryPaginationDto } from '../interfaces/query-pagination.dto';
 import { ListAllServicesService } from './services/list-all-services.service';
 
 @ApiTags('services')
@@ -13,7 +13,7 @@ export class ServicesController {
     private createServicesService: CreateServicesService,
     private fetchServicesService: FetchServicesService,
     private listAllServicesService: ListAllServicesService,
-  ) {}
+  ) { }
 
   @Post()
   create(@Body() createServicesDto: CreateServicesDto) {

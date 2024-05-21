@@ -3,14 +3,14 @@ import { randomUUID } from 'crypto';
 import { Repository } from 'typeorm';
 
 import { InternalServerErrorException } from '@nestjs/common';
-import { Services } from '../../../src/models/services.entity';
+import { Services } from '../../models/services.entity';
 import { CreateServicesDto } from '../dto/create-services.dto';
 
 export class CreateServicesService {
   constructor(
     @InjectRepository(Services)
     private readonly servicesRepository: Repository<Services>,
-  ) {}
+  ) { }
 
   async execute(createServicesDto: CreateServicesDto, externalId?: string) {
     const id = randomUUID();

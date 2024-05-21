@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { Services } from '../../../src/models/services.entity';
+import { Services } from '../../models/services.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -9,7 +9,7 @@ export class ListAllServicesService {
   constructor(
     @InjectRepository(Services)
     private servicesRepository: Repository<Services>,
-  ) {}
+  ) { }
 
   async execute() {
     const [all] = await this.servicesRepository.findAndCount({

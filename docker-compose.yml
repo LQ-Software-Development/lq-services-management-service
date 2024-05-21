@@ -20,7 +20,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
     volumes:
-      - .volumes/pg:/var/lib/postgresql/data
+      - lq_services_postgres_data:/var/lib/postgresql/data
 
 volumes:
-  lq-services-postgres_data:
+  lq_services_postgres_data:
