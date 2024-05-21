@@ -5,14 +5,15 @@ import { Repository } from "typeorm";
 
 @Injectable()
 export class ListStatusColumnsService {
-    constructor(
-        @InjectRepository(StatusColumn)
-        private readonly statusColumnRepository: Repository<StatusColumn>
-    ) { }
+  constructor(
+    @InjectRepository(StatusColumn)
+    private readonly statusColumnRepository: Repository<StatusColumn>
+  ) { }
 
-    async execute() {
-        return this.statusColumnRepository.find({
-            withDeleted: false,
-        });
-    }
+  async execute() {
+    return this.statusColumnRepository.find({
+      relations: ['tasks'],
+      withDeleted: false,
+    });
+  }
 }
