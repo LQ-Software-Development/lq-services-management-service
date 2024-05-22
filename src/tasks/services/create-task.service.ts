@@ -1,19 +1,19 @@
-import { InjectRepository } from "@nestjs/typeorm";
-import { Task } from "src/models/task.entity";
-import { Repository } from "typeorm";
-import { CreateTaskDto } from "../dto/create-task.dto";
-import { v4 as uuid } from "uuid";
-import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import { InjectRepository } from '@nestjs/typeorm';
+import { Task } from 'src/models/task.entity';
+import { Repository } from 'typeorm';
+import { CreateTaskDto } from '../dto/create-task.dto';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class CreateTaskService {
   constructor(
     @InjectRepository(Task)
-    private readonly taskRepository: Repository<Task>
-  ) { }
+    private readonly taskRepository: Repository<Task>,
+  ) {}
 
   execute(createTaskDto: CreateTaskDto) {
-    const id = uuid();
+    const id = randomUUID();
 
     try {
       const task = this.taskRepository.create({
