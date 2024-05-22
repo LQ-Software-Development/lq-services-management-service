@@ -1,16 +1,16 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateTaskDto {
   @ApiProperty({
-    example: 'Create a new task'
+    example: 'Create a new task',
   })
   resume: string;
   @ApiProperty({
-    example: 'TASK-001'
+    example: 'TASK-001',
   })
   code: string;
   @ApiProperty({
-    example: 'This is a description'
+    example: 'This is a description',
   })
   description?: string;
   @ApiProperty({
@@ -19,7 +19,7 @@ export class CreateTaskDto {
         type: 'info',
         log: 'Task created',
       },
-    ]
+    ],
   })
   logs: {
     type: string;
@@ -32,7 +32,7 @@ export class CreateTaskDto {
         name: 'John Doe',
         avatarUrl: 'https://example.com/avatar.png',
       },
-    ]
+    ],
   })
   assignedTo?: {
     userId: string;
@@ -41,7 +41,7 @@ export class CreateTaskDto {
   }[];
 
   @ApiProperty({
-    example: 'TASK-000'
+    example: 'TASK-000',
   })
   parentTaskId?: string;
 

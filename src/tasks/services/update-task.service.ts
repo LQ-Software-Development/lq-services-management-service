@@ -1,15 +1,15 @@
-import { Injectable, InternalServerErrorException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Task } from "src/models/task.entity";
-import { Repository } from "typeorm";
-import { UpdateTaskDto } from "../dto/update-task.dto";
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Task } from 'src/models/task.entity';
+import { Repository } from 'typeorm';
+import { UpdateTaskDto } from '../dto/update-task.dto';
 
 @Injectable()
 export class UpdateTaskService {
   constructor(
     @InjectRepository(Task)
-    private readonly taskRepository: Repository<Task>
-  ) { }
+    private readonly taskRepository: Repository<Task>,
+  ) {}
 
   execute(updateTaskDto: UpdateTaskDto, id: string) {
     try {

@@ -1,5 +1,13 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Task } from "./task.entity";
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Task } from './task.entity';
 
 @Entity()
 export class StatusColumn {
@@ -18,7 +26,7 @@ export class StatusColumn {
   @Column({ nullable: true })
   taskLimit?: number;
 
-  @OneToMany(() => Task, task => task.status)
+  @OneToMany(() => Task, (task) => task.status)
   tasks: Task[];
 
   @CreateDateColumn()

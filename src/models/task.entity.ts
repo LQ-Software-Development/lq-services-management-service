@@ -1,5 +1,14 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { StatusColumn } from "./column.entity";
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { StatusColumn } from './column.entity';
 
 @Entity()
 export class Task {
@@ -36,7 +45,7 @@ export class Task {
   @Column()
   statusId: string;
 
-  @ManyToOne(() => StatusColumn, column => column.tasks)
+  @ManyToOne(() => StatusColumn, (column) => column.tasks)
   status: StatusColumn;
 
   @Column({ nullable: true })
@@ -45,7 +54,7 @@ export class Task {
   @ManyToOne(() => Task, { nullable: true })
   parentTask?: Task;
 
-  @OneToMany(() => Task, task => task.parentTask)
+  @OneToMany(() => Task, (task) => task.parentTask)
   subTasks: Task[];
 
   @CreateDateColumn()

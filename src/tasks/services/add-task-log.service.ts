@@ -1,15 +1,15 @@
-import { NotFoundException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Task } from "src/models/task.entity";
-import { Repository } from "typeorm";
+import { NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Task } from 'src/models/task.entity';
+import { Repository } from 'typeorm';
 
 export class AddTaskLogService {
   constructor(
     @InjectRepository(Task)
-    private readonly taskRepository: Repository<Task>
-  ) { }
+    private readonly taskRepository: Repository<Task>,
+  ) {}
 
-  async execute(taskId: string, log: string, type: string) {
+  async execute(taskId: string, log: string, type?: string) {
     const task = await this.taskRepository.findOne({
       where: {
         id: taskId,

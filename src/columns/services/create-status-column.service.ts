@@ -1,16 +1,16 @@
-import { Injectable, InternalServerErrorException } from "@nestjs/common";
-import { CreateColumnDto } from "../dto/create-column.dto";
-import { InjectRepository } from "@nestjs/typeorm";
-import { StatusColumn } from "../../models/column.entity";
-import { Repository } from "typeorm";
-import { v4 as uuid } from "uuid";
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { CreateColumnDto } from '../dto/create-column.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { StatusColumn } from '../../models/column.entity';
+import { Repository } from 'typeorm';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class CreateStatusColumnService {
   constructor(
     @InjectRepository(StatusColumn)
-    private readonly statusColumnRepository: Repository<StatusColumn>
-  ) { }
+    private readonly statusColumnRepository: Repository<StatusColumn>,
+  ) {}
 
   async execute(createColumnDto: CreateColumnDto) {
     const id = uuid();

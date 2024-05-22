@@ -6,6 +6,7 @@ import { CreateTaskService } from './services/create-task.service';
 import { UpdateTaskService } from './services/update-task.service';
 import { DeleteTaskService } from './services/delete-task.service';
 import { AddTaskLogService } from './services/add-task-log.service';
+import { ChangeTaskStatusService } from './services/change-task-status.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Task])],
@@ -15,6 +16,7 @@ import { AddTaskLogService } from './services/add-task-log.service';
     UpdateTaskService,
     DeleteTaskService,
     AddTaskLogService,
+    ChangeTaskStatusService,
   ],
 })
-export class TasksModule { }
+export class TasksModule {}

@@ -10,6 +10,11 @@ import { DeleteStatusColumnService } from './services/delete-status-column.servi
 @Module({
   imports: [TypeOrmModule.forFeature([StatusColumn])],
   controllers: [ColumnsController],
-  providers: [CreateStatusColumnService, ListStatusColumnsService, UpdateStatusColumnService, DeleteStatusColumnService],
+  providers: [
+    CreateStatusColumnService,
+    ListStatusColumnsService,
+    UpdateStatusColumnService,
+    DeleteStatusColumnService,
+  ],
 })
-export class ColumnsModule { }
+export class ColumnsModule {}
