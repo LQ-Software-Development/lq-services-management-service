@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { InventoryItem } from 'src/inventory-items/entities/inventory-item.entity';
 
 export class CreateTaskDto {
   @ApiProperty({
@@ -49,4 +50,15 @@ export class CreateTaskDto {
     example: '123',
   })
   statusId: string;
+
+  @ApiProperty({
+    example: [
+      {
+        id: '123',
+        name: 'Inventory Item 1',
+        serialNumber: 'ABC123456',
+      },
+    ],
+  })
+  inventoryItems: InventoryItem[];
 }

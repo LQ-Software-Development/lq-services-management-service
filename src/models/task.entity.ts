@@ -3,12 +3,15 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { StatusColumn } from './column.entity';
+import { InventoryItem } from 'src/inventory-items/entities/inventory-item.entity';
 
 @Entity()
 export class Task {
@@ -65,4 +68,10 @@ export class Task {
 
   @DeleteDateColumn()
   deletedAt?: Date;
+
+  @ManyToMany(() => InventoryItem, (inventoryItem) => inventoryItem.tasks, {
+    cascade: true,
+  })
+  @JoinTable()
+  inventoryItems: InventoryItem[];
 }
