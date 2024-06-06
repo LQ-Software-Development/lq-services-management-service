@@ -63,7 +63,7 @@ function makeServicesBody(
   return {
     name: 'string',
     description: 'string',
-    timeExecution: new Date(),
+    timeExecution: 60,
     coverUrl: 'http://google.com.br',
     servicePrice: 10,
     ...override,

@@ -20,7 +20,7 @@ export class Services {
   description: string;
 
   @Column()
-  timeExecution: Date;
+  timeExecution: number;
 
   @Column()
   servicePrice: number;

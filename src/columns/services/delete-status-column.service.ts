@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { StatusColumn } from 'src/models/column.entity';
+import { StatusColumn } from '../../models/column.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()

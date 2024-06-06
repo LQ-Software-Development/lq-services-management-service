@@ -1,11 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsDateString,
-  IsNumber,
-  IsOptional,
-  IsString,
-  IsUrl,
-} from 'class-validator';
+import { IsNumber, IsOptional, IsString, IsUrl } from 'class-validator';
 
 export class CreateServicesDto {
   @ApiProperty({
@@ -34,13 +28,13 @@ export class CreateServicesDto {
   coverUrl?: string;
 
   @ApiProperty({
-    example: new Date(),
-    type: Date,
-    description: 'Date and time of service execution',
+    example: 60,
+    description: 'time of service execution',
   })
-  @IsDateString()
-  timeExecution: Date;
+  @IsNumber()
+  timeExecution: number;
 
+  @IsNumber()
   @ApiProperty({
     example: 100,
     type: Number,

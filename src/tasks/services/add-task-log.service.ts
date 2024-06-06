@@ -1,6 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Task } from 'src/models/task.entity';
+import { Task } from '../../models/task.entity';
 import { Repository } from 'typeorm';
 
 export class AddTaskLogService {

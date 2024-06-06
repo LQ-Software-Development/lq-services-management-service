@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Task } from 'src/models/task.entity';
+import { Task } from '../../models/task.entity';
 import {
   Injectable,
   InternalServerErrorException,

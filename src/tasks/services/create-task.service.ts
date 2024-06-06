@@ -1,5 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Task } from 'src/models/task.entity';
+import { Task } from '../../models/task.entity';
 import { Repository } from 'typeorm';
 import { CreateTaskDto } from '../dto/create-task.dto';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
