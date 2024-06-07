@@ -9,10 +9,11 @@ export class ListAllServicesService {
   constructor(
     @InjectRepository(Services)
     private servicesRepository: Repository<Services>,
-  ) { }
+  ) {}
 
   async execute() {
     const [all] = await this.servicesRepository.findAndCount({
+      withDeleted: false,
       order: { index: 'ASC' },
     });
 

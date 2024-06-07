@@ -10,7 +10,7 @@ export class FetchServicesService {
   constructor(
     @InjectRepository(Services)
     private servicesRepository: Repository<Services>,
-  ) { }
+  ) {}
 
   async execute(queryPaginationDto: QueryPaginationDto) {
     const { page = 1, limit = 10, search } = queryPaginationDto;
@@ -21,6 +21,7 @@ export class FetchServicesService {
       where: {
         name: search ? ILike(`%${search}%`) : undefined,
       },
+      withDeleted: false,
       order: { index: 'DESC' },
     });
 
