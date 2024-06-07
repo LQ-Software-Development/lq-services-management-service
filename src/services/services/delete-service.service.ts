@@ -14,6 +14,7 @@ export class DeleteServiceService {
     try {
       await this.serviceRepository.softDelete(id);
     } catch (error) {
+      console.error(error);
       throw new InternalServerErrorException('Error deleting service');
     }
   }
