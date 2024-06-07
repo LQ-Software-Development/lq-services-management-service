@@ -12,7 +12,8 @@ export class ListStatusColumnsService {
 
   async execute() {
     return this.statusColumnRepository.find({
-      relations: ['tasks'],
+      relations: ['tasks', 'tasks.inventoryItems'],
+
       withDeleted: false,
     });
   }
