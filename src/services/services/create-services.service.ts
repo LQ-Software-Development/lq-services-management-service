@@ -10,7 +10,7 @@ export class CreateServicesService {
   constructor(
     @InjectRepository(Services)
     private readonly servicesRepository: Repository<Services>,
-  ) { }
+  ) {}
 
   async execute(createServicesDto: CreateServicesDto, externalId?: string) {
     const id = randomUUID();

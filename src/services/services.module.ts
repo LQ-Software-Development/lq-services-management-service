@@ -6,6 +6,7 @@ import { FetchServicesService } from './services/fetch-services.service';
 import { CreateServicesService } from './services/create-services.service';
 import { ListAllServicesService } from './services/list-all-services.service';
 import { DeleteServiceService } from './services/delete-service.service';
+import { UpdateServiceService } from './services/update-service.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Services])],
@@ -15,6 +16,7 @@ import { DeleteServiceService } from './services/delete-service.service';
     CreateServicesService,
     ListAllServicesService,
     DeleteServiceService,
+    UpdateServiceService,
   ],
 })
 export class ServicesModule {}
