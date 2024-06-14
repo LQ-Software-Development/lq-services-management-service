@@ -5,7 +5,9 @@ import {
   DeleteDateColumn,
   UpdateDateColumn,
   CreateDateColumn,
+  ManyToMany,
 } from 'typeorm';
+import { Task } from './task.entity';
 
 @Entity()
 export class Services {
@@ -37,6 +39,9 @@ export class Services {
 
   @Column({ default: true })
   status: boolean;
+
+  @ManyToMany(() => Task, (task) => task.services)
+  tasks: Task[];
 
   @CreateDateColumn()
   createdAt: Date;

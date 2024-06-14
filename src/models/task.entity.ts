@@ -3,15 +3,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { StatusColumn } from './column.entity';
-import { InventoryItem } from 'src/inventory-items/entities/inventory-item.entity';
 
 @Entity()
 export class Task {
@@ -19,15 +16,32 @@ export class Task {
   id: string;
 
   @Column()
-  resume: string;
-
-  @Column()
   code: string;
+
+  @Column({ nullable: true, type: 'jsonb' })
+  client?: {
+    id: string;
+    name: string;
+    address: string;
+  };
+
+  @Column({ nullable: true })
+  value?: number;
+
+  @Column({ nullable: true, type: 'jsonb' })
+  assignedTo?: {
+    userId: string;
+    name: string;
+    avatarUrl: string;
+  }[];
 
   @Column({ nullable: true })
   description?: string;
 
-  @Column({ type: 'simple-array' })
+  @Column({ nullable: true })
+  stockId?: string;
+
+  @Column({ type: 'jsonb', default: [] })
   logs: {
     type: string;
     author: {
@@ -38,13 +52,27 @@ export class Task {
     log: string;
   }[];
 
-  @Column({ nullable: true, type: 'simple-array' })
-  assignedTo?: {
-    userId: string;
+  @Column({ type: 'jsonb', nullable: true })
+  services: {
     name: string;
-    avatarUrl: string;
+    serviceId: string;
+    amount: number;
   }[];
 
+  @Column({ nullable: true, type: 'jsonb' })
+  item?: {
+    id: string;
+    serialNumber: string;
+    name: string;
+  };
+
+  @Column({ nullable: true })
+  address?: string;
+
+  @Column({ nullable: true })
+  deadline?: Date;
+
+  // Relations
   @Column()
   statusId: string;
 
@@ -60,6 +88,7 @@ export class Task {
   @OneToMany(() => Task, (task) => task.parentTask)
   subTasks: Task[];
 
+  // Timestamps
   @CreateDateColumn()
   createdAt: Date;
 
@@ -68,10 +97,4 @@ export class Task {
 
   @DeleteDateColumn()
   deletedAt?: Date;
-
-  @ManyToMany(() => InventoryItem, (inventoryItem) => inventoryItem.tasks, {
-    cascade: true,
-  })
-  @JoinTable()
-  inventoryItems: InventoryItem[];
 }

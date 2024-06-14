@@ -1,64 +1,62 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { InventoryItem } from 'src/inventory-items/entities/inventory-item.entity';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { UserDto } from './user-dto';
+import { ClientDto } from './client.dto';
+import { randomUUID } from 'crypto';
+import { InventoryItemDto } from './inventory-item.dto';
 
 export class CreateTaskDto {
   @ApiProperty({
-    example: 'Create a new task',
-  })
-  resume: string;
-  @ApiProperty({
-    example: 'TASK-001',
+    example: 'OS001',
   })
   code: string;
-  @ApiProperty({
-    example: 'This is a description',
+
+  @ApiPropertyOptional({
+    type: ClientDto,
+  })
+  client?: ClientDto;
+
+  @ApiPropertyOptional({
+    example: 100,
+  })
+  value?: number;
+
+  @ApiPropertyOptional({
+    type: [UserDto],
+  })
+  assignedTo?: UserDto[];
+
+  @ApiPropertyOptional({
+    example: 'Essa é uma observação sobre a tarefa.',
   })
   description?: string;
-  @ApiProperty({
-    example: [
-      {
-        type: 'info',
-        log: 'Task created',
-      },
-    ],
-  })
-  logs: {
-    type: string;
-    log: string;
-  }[];
-  @ApiProperty({
-    example: [
-      {
-        userId: '123',
-        name: 'John Doe',
-        avatarUrl: 'https://example.com/avatar.png',
-      },
-    ],
-  })
-  assignedTo?: {
-    userId: string;
-    name: string;
-    avatarUrl: string;
-  }[];
 
   @ApiProperty({
-    example: 'TASK-000',
+    example: randomUUID(),
   })
-  parentTaskId?: string;
+  stockId: string;
+
+  @ApiPropertyOptional({
+    type: InventoryItemDto,
+  })
+  item?: InventoryItemDto;
+
+  @ApiPropertyOptional({
+    example: 'Avendia Paulista, 1000 - São Paulo - SP',
+  })
+  address?: string;
 
   @ApiProperty({
-    example: '123',
+    example: new Date().toString(),
+  })
+  deadline: Date;
+
+  @ApiProperty({
+    example: randomUUID(),
   })
   statusId: string;
 
   @ApiProperty({
-    example: [
-      {
-        id: '123',
-        name: 'Inventory Item 1',
-        serialNumber: 'ABC123456',
-      },
-    ],
+    example: randomUUID(),
   })
-  inventoryItems: InventoryItem[];
+  parentTaskId?: string;
 }
