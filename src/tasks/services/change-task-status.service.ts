@@ -7,12 +7,15 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { ChangeTaskStatusDto } from '../dto/change-task-status.dto';
+import { StatusColumn } from 'src/models/column.entity';
 
 @Injectable()
 export class ChangeTaskStatusService {
   constructor(
     @InjectRepository(Task)
     private readonly taskRepository: Repository<Task>,
+    @InjectRepository(StatusColumn)
+    private readonly statusColumnRepository: Repository<StatusColumn>,
   ) {}
 
   async execute(changeTaskStatusDto: ChangeTaskStatusDto) {
@@ -20,6 +23,7 @@ export class ChangeTaskStatusService {
 
     try {
       const task = await this.taskRepository.findOne({
+        relations: ['columns'],
         where: {
           id: taskId,
         },
@@ -29,8 +33,16 @@ export class ChangeTaskStatusService {
         throw new NotFoundException('Task not found');
       }
 
-      task.statusId = statusId;
-      task.logs.push({
+      const status = await this.statusColumnRepository.findOne({
+        where: {
+          id: statusId,
+        },
+      });
+
+      task.columns.filter((column) => column.board.id !== status.board.id);
+      task.columns.push(status);
+
+      await task.logs.push({
         author: {
           name: 'System',
           userId: 'system',

@@ -3,11 +3,14 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  OneToMany,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Task } from './task.entity';
+import { Board } from './board.entity';
 
 @Entity()
 export class StatusColumn {
@@ -26,7 +29,11 @@ export class StatusColumn {
   @Column({ nullable: true })
   taskLimit?: number;
 
-  @OneToMany(() => Task, (task) => task.status)
+  @ManyToOne(() => Board, (board) => board.columns)
+  board: Board;
+
+  @ManyToMany(() => Task, (task) => task.columns)
+  @JoinTable()
   tasks: Task[];
 
   @CreateDateColumn()

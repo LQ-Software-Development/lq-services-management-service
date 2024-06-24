@@ -59,4 +59,10 @@ export class CreateTaskDto {
     example: randomUUID(),
   })
   parentTaskId?: string;
+
+  @ApiPropertyOptional({
+    type: [CreateTaskDto],
+    example: [],
+  })
+  subTasks?: CreateTaskDto[];
 }

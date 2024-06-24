@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -73,20 +74,14 @@ export class Task {
   deadline?: Date;
 
   // Relations
-  @Column()
-  statusId: string;
-
-  @ManyToOne(() => StatusColumn, (column) => column.tasks)
-  status: StatusColumn;
-
-  @Column({ nullable: true })
-  parentTaskId?: string;
-
-  @ManyToOne(() => Task, { nullable: true })
-  parentTask?: Task;
+  @ManyToMany(() => StatusColumn, (column) => column.tasks)
+  columns: StatusColumn[];
 
   @OneToMany(() => Task, (task) => task.parentTask)
   subTasks: Task[];
+
+  @ManyToOne(() => Task, (task) => task.subTasks)
+  parentTask: Task;
 
   // Timestamps
   @CreateDateColumn()

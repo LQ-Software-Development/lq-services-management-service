@@ -7,9 +7,10 @@ import { UpdateTaskService } from './services/update-task.service';
 import { DeleteTaskService } from './services/delete-task.service';
 import { AddTaskLogService } from './services/add-task-log.service';
 import { ChangeTaskStatusService } from './services/change-task-status.service';
+import { StatusColumn } from 'src/models/column.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Task])],
+  imports: [TypeOrmModule.forFeature([Task, StatusColumn])],
   controllers: [TasksController],
   providers: [
     CreateTaskService,

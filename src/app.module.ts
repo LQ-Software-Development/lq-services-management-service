@@ -8,6 +8,9 @@ import { ColumnsModule } from './columns/columns.module';
 import { StatusColumn } from './models/column.entity';
 import { TasksModule } from './tasks/tasks.module';
 import { Task } from './models/task.entity';
+import { BoardsModule } from './boards/boards.module';
+import { Board } from './models/board.entity';
+import { InventoryItemsModule } from './inventory-items/inventory-items.module';
 
 @Module({
   imports: [
@@ -15,12 +18,14 @@ import { Task } from './models/task.entity';
     TypeOrmModule.forRoot({
       type: 'postgres',
       url: process.env.DATABASE_URL,
-      entities: [Services, StatusColumn, Task],
+      entities: [Services, StatusColumn, Task, Board],
       synchronize: true,
     }),
     ServicesModule,
     ColumnsModule,
     TasksModule,
+    BoardsModule,
+    InventoryItemsModule,
   ],
   controllers: [AppController],
   providers: [],
