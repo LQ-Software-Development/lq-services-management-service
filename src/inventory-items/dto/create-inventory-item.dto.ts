@@ -1,30 +1,69 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  IsDateString,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateInventoryItemDto {
   @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
   name: string;
 
   @ApiPropertyOptional()
-  model: string;
+  @IsOptional()
+  @IsString()
+  model?: string;
 
   @ApiPropertyOptional()
-  modelId: string;
+  @IsOptional()
+  @IsString()
+  modelId?: string;
 
   @ApiPropertyOptional()
-  code: string;
+  @IsOptional()
+  @IsString()
+  ownerId?: string;
 
   @ApiPropertyOptional()
-  serialNumber: string;
+  @IsOptional()
+  @IsString()
+  ownerName?: string;
 
   @ApiPropertyOptional()
-  brandName: string;
+  @IsOptional()
+  @IsString()
+  code?: string;
 
   @ApiPropertyOptional()
-  brandId: string;
+  @IsOptional()
+  @IsString()
+  serialNumber?: string;
 
   @ApiPropertyOptional()
-  contractEnds: Date;
+  @IsOptional()
+  @IsString()
+  type?: string;
 
   @ApiPropertyOptional()
-  observation: string;
+  @IsOptional()
+  @IsString()
+  brandName?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  brandId?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsDateString()
+  contractEnds?: Date;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  observation?: string;
 }
