@@ -25,7 +25,7 @@ export class CreateServicesDto {
     description: 'Cover image URL',
   })
   @IsOptional()
-  @IsUrl({})
+  @IsString()
   coverUrl?: string;
 
   @ApiPropertyOptional({
