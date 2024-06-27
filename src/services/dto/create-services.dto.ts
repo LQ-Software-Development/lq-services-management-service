@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNumber, IsOptional, IsString, IsUrl } from 'class-validator';
 
 export class CreateServicesDto {
@@ -10,27 +10,29 @@ export class CreateServicesDto {
   @IsString()
   name: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 'This is a description',
     type: String,
     description: 'Service description',
   })
+  @IsOptional()
   @IsString()
   description: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 'https://example.com/image.jpg',
     type: String,
     description: 'Cover image URL',
   })
-  @IsUrl()
   @IsOptional()
+  @IsUrl({})
   coverUrl?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 60,
     description: 'time of service execution',
   })
+  @IsOptional()
   @IsNumber()
   timeExecution: number;
 
