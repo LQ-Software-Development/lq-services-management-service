@@ -1,4 +1,4 @@
-import { IsDate, IsOptional, IsString } from "class-validator";
+import { IsDateString, IsOptional, IsString } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateScheduleDto {
@@ -18,8 +18,10 @@ export class CreateScheduleDto {
     @IsOptional()
     description?: string;
 
-    @ApiProperty()
-    @IsString()
+    @ApiProperty({
+        example: new Date()
+    })
+    @IsDateString()
     date: string;
 
     @ApiProperty()
