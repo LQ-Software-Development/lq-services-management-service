@@ -12,6 +12,8 @@ import { BoardsModule } from './boards/boards.module';
 import { Board } from './models/board.entity';
 import { InventoryItemsModule } from './inventory-items/inventory-items.module';
 import { InventoryItem } from './inventory-items/entities/inventory-item.entity';
+import { SchedulesModule } from './schedules/schedules.module';
+import { Schedule } from './models/schedule.entity';
 
 @Module({
   imports: [
@@ -19,7 +21,7 @@ import { InventoryItem } from './inventory-items/entities/inventory-item.entity'
     TypeOrmModule.forRoot({
       type: 'postgres',
       url: process.env.DATABASE_URL,
-      entities: [Services, StatusColumn, Task, Board, InventoryItem],
+      entities: [Services, StatusColumn, Task, Board, InventoryItem, Schedule],
       synchronize: true,
     }),
     ServicesModule,
@@ -27,6 +29,7 @@ import { InventoryItem } from './inventory-items/entities/inventory-item.entity'
     TasksModule,
     BoardsModule,
     InventoryItemsModule,
+    SchedulesModule,
   ],
   controllers: [AppController],
   providers: [],
