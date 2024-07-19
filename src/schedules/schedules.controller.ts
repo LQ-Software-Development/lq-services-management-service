@@ -5,6 +5,7 @@ import { CreateSchedulesService } from './service/create-schedules.service';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ListSchedulesService } from './service/list-schedules.service';
 import { ListSchedulesServiceDto } from './dto/list-schedules.dto';
+import { DeleteSchedulesService } from './service/delete-schedules.service';
 
 @ApiTags('schedules')
 @Controller('schedules')
@@ -12,6 +13,7 @@ export class SchedulesController {
   constructor(
     private readonly createSchedulesService: CreateSchedulesService,
     private readonly listSchedulesService: ListSchedulesService,
+    private readonly deleteSchedulesService: DeleteSchedulesService,
   ) { }
 
   @Post()
@@ -49,10 +51,10 @@ export class SchedulesController {
     update(@Param('id') id: string, @Body() updateScheduleDto: UpdateScheduleDto) {
       return this.schedulesService.update(+id, updateScheduleDto);
     }
+  */
   
     @Delete(':id')
     remove(@Param('id') id: string) {
-      return this.schedulesService.remove(+id);
+      return this.deleteSchedulesService.execute(id);
     }
-    */
 }
