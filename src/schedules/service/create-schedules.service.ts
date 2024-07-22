@@ -3,6 +3,7 @@ import { CreateScheduleDto } from '../dto/create-schedule.dto';
 import { Schedule } from 'src/models/schedule.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm/repository/Repository';
+import { addDays } from 'date-fns';
 
 @Injectable()
 export class CreateSchedulesService {
@@ -16,7 +17,7 @@ export class CreateSchedulesService {
 
     if (createScheduleDto.eachDayRepeat && createScheduleDto.finalRepeatDate) {
       const finalRepeatDate = new Date(createScheduleDto.finalRepeatDate);
-      const date = new Date(createScheduleDto.date);
+      let date = new Date(createScheduleDto.date);
 
       while (date <= finalRepeatDate) {
         schedules.push({
@@ -24,7 +25,7 @@ export class CreateSchedulesService {
           date: date.toISOString(),
         });
 
-        date.setDate(date.getDate() + createScheduleDto.eachDayRepeat);
+        date = addDays(date, createScheduleDto.eachDayRepeat);
       }
     } else {
       delete createScheduleDto.eachDayRepeat;
@@ -33,6 +34,6 @@ export class CreateSchedulesService {
       schedules.push(createScheduleDto);
     }
 
-    return this.scheduleRepository.save(createScheduleDto);
+    return this.scheduleRepository.save(schedules);
   }
 }
