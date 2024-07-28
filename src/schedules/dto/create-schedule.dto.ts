@@ -1,4 +1,10 @@
-import { IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsDateString,
+  IsNumber,
+  IsObject,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateScheduleDto {
@@ -47,4 +53,13 @@ export class CreateScheduleDto {
   @IsDateString()
   @IsOptional()
   finalRepeatDate?: string;
+
+  @ApiPropertyOptional({
+    example: {
+      key: 'value',
+    },
+  })
+  @IsObject()
+  @IsOptional()
+  metadata?: Record<string, any>;
 }
