@@ -6,15 +6,17 @@ import {
   Param,
   Delete,
   Query,
+  Put,
 } from '@nestjs/common';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
-// import { UpdateScheduleDto } from './dto/update-schedule.dto';
+import { UpdateScheduleDto } from './dto/update-schedule.dto';
 import { CreateSchedulesService } from './service/create-schedules.service';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ListSchedulesService } from './service/list-schedules.service';
 import { ListSchedulesServiceDto } from './dto/list-schedules.dto';
 import { DeleteSchedulesService } from './service/delete-schedules.service';
 import { FetchScheduleService } from './service/fetch-schedule.service';
+import { UpdateScheduleService } from './service/update-schedule.service';
 
 @ApiTags('schedules')
 @Controller('schedules')
@@ -24,6 +26,7 @@ export class SchedulesController {
     private readonly listSchedulesService: ListSchedulesService,
     private readonly deleteSchedulesService: DeleteSchedulesService,
     private readonly fetchScheduleService: FetchScheduleService,
+    private readonly updateScheduleService: UpdateScheduleService,
   ) {}
 
   @Post()
@@ -56,13 +59,13 @@ export class SchedulesController {
     return this.fetchScheduleService.execute({ id });
   }
 
-  /*
-    
-    @Patch(':id')
-    update(@Param('id') id: string, @Body() updateScheduleDto: UpdateScheduleDto) {
-      return this.schedulesService.update(+id, updateScheduleDto);
-    }
-  */
+  @Put(':id')
+  update(
+    @Param('id') id: string,
+    @Body() updateScheduleDto: UpdateScheduleDto,
+  ) {
+    return this.updateScheduleService.execute({ id, updateScheduleDto });
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {

@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ListSchedulesService } from './service/list-schedules.service';
 import { DeleteSchedulesService } from './service/delete-schedules.service';
 import { FetchScheduleService } from './service/fetch-schedule.service';
+import { UpdateScheduleService } from './service/update-schedule.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Schedule])],
@@ -15,6 +16,7 @@ import { FetchScheduleService } from './service/fetch-schedule.service';
     ListSchedulesService,
     DeleteSchedulesService,
     FetchScheduleService,
+    UpdateScheduleService,
   ],
 })
 export class SchedulesModule {}
