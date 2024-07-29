@@ -6,8 +6,10 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
   ManyToMany,
+  OneToMany,
 } from 'typeorm';
 import { Task } from './task.entity';
+import { Schedule } from './schedule.entity';
 
 @Entity()
 export class Services {
@@ -42,6 +44,9 @@ export class Services {
 
   @ManyToMany(() => Task, (task) => task.services)
   tasks: Task[];
+
+  @OneToMany(() => Schedule, (schedule) => schedule.service)
+  schedules: Schedule[];
 
   @CreateDateColumn()
   createdAt: Date;

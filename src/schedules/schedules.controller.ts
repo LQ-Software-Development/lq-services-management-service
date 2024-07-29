@@ -1,11 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
-import { UpdateScheduleDto } from './dto/update-schedule.dto';
+// import { UpdateScheduleDto } from './dto/update-schedule.dto';
 import { CreateSchedulesService } from './service/create-schedules.service';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ListSchedulesService } from './service/list-schedules.service';
 import { ListSchedulesServiceDto } from './dto/list-schedules.dto';
 import { DeleteSchedulesService } from './service/delete-schedules.service';
+import { FetchScheduleService } from './service/fetch-schedule.service';
 
 @ApiTags('schedules')
 @Controller('schedules')
@@ -14,7 +23,8 @@ export class SchedulesController {
     private readonly createSchedulesService: CreateSchedulesService,
     private readonly listSchedulesService: ListSchedulesService,
     private readonly deleteSchedulesService: DeleteSchedulesService,
-  ) { }
+    private readonly fetchScheduleService: FetchScheduleService,
+  ) {}
 
   @Post()
   create(@Body() createScheduleDto: CreateScheduleDto) {
@@ -37,24 +47,25 @@ export class SchedulesController {
     return this.listSchedulesService.execute({
       startDate,
       endDate,
-      organizationId: query.organizationId
+      organizationId: query.organizationId,
     });
   }
 
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.fetchScheduleService.execute({ id });
+  }
+
   /*
-    @Get(':id')
-    findOne(@Param('id') id: string) {
-      return this.schedulesService.findOne(+id);
-    }
-  
+    
     @Patch(':id')
     update(@Param('id') id: string, @Body() updateScheduleDto: UpdateScheduleDto) {
       return this.schedulesService.update(+id, updateScheduleDto);
     }
   */
-  
-    @Delete(':id')
-    remove(@Param('id') id: string) {
-      return this.deleteSchedulesService.execute(id);
-    }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.deleteSchedulesService.execute(id);
+  }
 }

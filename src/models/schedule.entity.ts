@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Services } from './services.entity';
 
 @Entity()
 export class Schedule {
@@ -26,6 +27,9 @@ export class Schedule {
 
   @Column({ nullable: true })
   serviceId?: string;
+
+  @ManyToOne(() => Services, (service) => service.schedules)
+  service?: Services;
 
   @Column({ nullable: true, type: 'jsonb' })
   metadata?: Record<string, any>;
