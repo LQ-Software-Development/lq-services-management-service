@@ -27,7 +27,7 @@ export class SchedulesController {
     private readonly deleteSchedulesService: DeleteSchedulesService,
     private readonly fetchScheduleService: FetchScheduleService,
     private readonly updateScheduleService: UpdateScheduleService,
-  ) {}
+  ) { }
 
   @Post()
   create(@Body() createScheduleDto: CreateScheduleDto) {
@@ -37,6 +37,8 @@ export class SchedulesController {
   @ApiQuery({ name: 'startDate', required: false, type: Date })
   @ApiQuery({ name: 'endDate', required: false, type: Date })
   @ApiQuery({ name: 'organizationId', required: false })
+  @ApiQuery({ name: 'clientId', required: false })
+  @ApiQuery({ name: 'assignedId', required: false })
   @Get()
   findAll(@Query() query: ListSchedulesServiceDto) {
     let startDate: Date | undefined;
@@ -45,12 +47,15 @@ export class SchedulesController {
     if (query.startDate && query.endDate) {
       startDate = new Date(query.startDate);
       endDate = new Date(query.endDate);
+
+      delete query.startDate;
+      delete query.endDate;
     }
 
     return this.listSchedulesService.execute({
+      ...query,
       startDate,
       endDate,
-      organizationId: query.organizationId,
     });
   }
 

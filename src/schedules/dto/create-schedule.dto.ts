@@ -21,6 +21,11 @@ export class CreateScheduleDto {
   @ApiProperty()
   @IsString()
   @IsOptional()
+  assignedId?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
   description?: string;
 
   @ApiProperty({

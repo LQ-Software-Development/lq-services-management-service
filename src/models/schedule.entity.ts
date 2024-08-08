@@ -26,6 +26,9 @@ export class Schedule {
   organizationId?: string;
 
   @Column({ nullable: true })
+  assignedId?: string;
+
+  @Column({ nullable: true })
   serviceId?: string;
 
   @ManyToOne(() => Services, (service) => service.schedules)
