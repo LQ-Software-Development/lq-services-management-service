@@ -10,18 +10,24 @@ export class CreateSchedulesService {
   constructor(
     @InjectRepository(Schedule)
     private scheduleRepository: Repository<Schedule>,
-  ) {}
+  ) { }
 
-  execute(createScheduleDto: CreateScheduleDto) {
+  async execute(createScheduleDto: CreateScheduleDto) {
     const schedules = [];
+    let schedulesCount = await this.scheduleRepository.countBy({
+      organizationId: createScheduleDto.organizationId,
+    });
 
     if (createScheduleDto.eachDayRepeat && createScheduleDto.finalRepeatDate) {
       const finalRepeatDate = new Date(createScheduleDto.finalRepeatDate);
       let date = new Date(createScheduleDto.date);
 
       while (date <= finalRepeatDate) {
+        schedulesCount++;
+
         schedules.push({
           ...createScheduleDto,
+          index: schedulesCount,
           date: date.toISOString(),
         });
 
@@ -31,7 +37,10 @@ export class CreateSchedulesService {
       delete createScheduleDto.eachDayRepeat;
       delete createScheduleDto.finalRepeatDate;
 
-      schedules.push(createScheduleDto);
+      schedules.push({
+        ...createScheduleDto,
+        index: schedulesCount + 1,
+      });
     }
 
     return this.scheduleRepository.save(schedules);

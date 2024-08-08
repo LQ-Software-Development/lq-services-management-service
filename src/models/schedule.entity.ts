@@ -33,4 +33,7 @@ export class Schedule {
 
   @Column({ nullable: true, type: 'jsonb' })
   metadata?: Record<string, any>;
+
+  @Column({ nullable: true })
+  index: number;
 }
