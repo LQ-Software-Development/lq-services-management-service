@@ -7,6 +7,7 @@ import { ListSchedulesService } from './service/list-schedules.service';
 import { DeleteSchedulesService } from './service/delete-schedules.service';
 import { FetchScheduleService } from './service/fetch-schedule.service';
 import { UpdateScheduleService } from './service/update-schedule.service';
+import { FinancialApiProvider } from 'src/providers/financial-api.provider';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Schedule])],
@@ -17,6 +18,7 @@ import { UpdateScheduleService } from './service/update-schedule.service';
     DeleteSchedulesService,
     FetchScheduleService,
     UpdateScheduleService,
+    FinancialApiProvider,
   ],
 })
-export class SchedulesModule {}
+export class SchedulesModule { }

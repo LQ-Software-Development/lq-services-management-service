@@ -4,7 +4,7 @@ import { Services } from './services.entity';
 @Entity()
 export class Schedule {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id?: string;
 
   @Column({ nullable: true })
   clientId?: string;
@@ -27,6 +27,9 @@ export class Schedule {
 
   @Column({ nullable: true })
   assignedId?: string;
+
+  @Column({ nullable: true })
+  assignedName?: string;
 
   @Column({ nullable: true })
   serviceId?: string;
