@@ -59,6 +59,11 @@ export class CreateScheduleDto {
   @IsOptional()
   finalRepeatDate?: string;
 
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  status?: string;
+
   @ApiPropertyOptional({
     example: {
       key: 'value',
