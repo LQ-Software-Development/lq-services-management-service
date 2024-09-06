@@ -20,6 +20,7 @@ export class FinancialApiProvider {
     organizationId,
   }: GenerateFinanicialTransactionDto) {
     return this.financialApiAxios.post('/transactions', {
+      type: 'income',
       amount,
       description,
       date,
