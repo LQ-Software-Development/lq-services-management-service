@@ -39,6 +39,9 @@ export class SchedulesController {
   @ApiQuery({ name: 'organizationId', required: false })
   @ApiQuery({ name: 'clientId', required: false })
   @ApiQuery({ name: 'assignedId', required: false })
+  @ApiQuery({ name: 'code', required: false })
+  @ApiQuery({ name: 'page', required: false })
+  @ApiQuery({ name: 'limit', required: false })
   @Get()
   findAll(@Query() query: ListSchedulesServiceDto) {
     let startDate: Date | undefined;
@@ -54,6 +57,8 @@ export class SchedulesController {
 
     return this.listSchedulesService.execute({
       ...query,
+      page: query.page ? Number(query.page) : undefined,
+      limit: query.limit ? Number(query.limit) : undefined,
       startDate,
       endDate,
     });

@@ -8,12 +8,15 @@ export class ListSchedulesService {
     private scheduleRepository: Repository<Schedule>,
   ) { }
 
-  execute({
+  async execute({
     startDate,
     endDate,
     organizationId,
     clientId,
     assignedId,
+    code,
+    page,
+    limit,
   }: ListSchedulesServiceDto) {
     const whereClause = {};
 
@@ -24,6 +27,20 @@ export class ListSchedulesService {
     whereClause['organizationId'] = organizationId;
     whereClause['clientId'] = clientId;
     whereClause['assignedId'] = assignedId;
+    whereClause['index'] = code ? Number(code) : undefined;
+
+    if (page && limit) {
+      const [data, count] = await this.scheduleRepository.findAndCount({
+        where: whereClause,
+        take: limit,
+        skip: (page - 1) * limit,
+      });
+
+      return {
+        data,
+        count,
+      };
+    }
 
     return this.scheduleRepository.find({
       where: whereClause,
@@ -37,4 +54,7 @@ export interface ListSchedulesServiceDto {
   organizationId?: string;
   clientId?: string;
   assignedId?: string;
+  code?: string;
+  page?: number;
+  limit?: number;
 }
