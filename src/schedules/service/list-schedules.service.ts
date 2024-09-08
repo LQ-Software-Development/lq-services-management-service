@@ -27,7 +27,8 @@ export class ListSchedulesService {
     whereClause['organizationId'] = organizationId;
     whereClause['clientId'] = clientId;
     whereClause['assignedId'] = assignedId;
-    whereClause['index'] = code ? Number(code) : undefined;
+    whereClause['index'] =
+      code && !isNaN(Number(code)) ? Number(code) : undefined;
 
     if (page && limit) {
       const [data, count] = await this.scheduleRepository.findAndCount({
