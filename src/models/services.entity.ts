@@ -42,6 +42,9 @@ export class Services {
   @Column({ default: true })
   status: boolean;
 
+  @Column({ type: 'jsonb', nullable: true })
+  metadata?: Record<string, any>;
+
   @ManyToMany(() => Task, (task) => task.services)
   tasks: Task[];
 

@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
 
 export class CreateServicesDto {
   @ApiProperty({
@@ -44,4 +44,15 @@ export class CreateServicesDto {
   })
   @IsNumber()
   servicePrice: number;
+
+  @ApiPropertyOptional({
+    example: {
+      key: 'value',
+    },
+    type: Object,
+    description: 'Service metadata',
+  })
+  @IsOptional()
+  @IsObject()
+  metadata?: Record<string, any>;
 }
