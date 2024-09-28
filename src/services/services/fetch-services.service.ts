@@ -10,16 +10,17 @@ export class FetchServicesService {
   constructor(
     @InjectRepository(Services)
     private servicesRepository: Repository<Services>,
-  ) {}
+  ) { }
 
   async execute(queryPaginationDto: QueryPaginationDto) {
-    const { page = 1, limit = 10, search } = queryPaginationDto;
+    const { page = 1, limit = 10, search, externalId } = queryPaginationDto;
 
     const [services, count] = await this.servicesRepository.findAndCount({
       take: limit,
       skip: (page - 1) * limit,
       where: {
         name: search ? ILike(`%${search}%`) : undefined,
+        externalId,
       },
       withDeleted: false,
       order: { index: 'DESC' },

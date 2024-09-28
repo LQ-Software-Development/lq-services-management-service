@@ -27,16 +27,17 @@ export class ServicesController {
     private listAllServicesService: ListAllServicesService,
     private deleteServiceService: DeleteServiceService,
     private updateServiceService: UpdateServiceService,
-  ) {}
+  ) { }
 
   @Post()
   create(@Body() createServicesDto: CreateServicesDto) {
     return this.createServicesService.execute(createServicesDto);
   }
 
-  @ApiQuery({ name: 'page', required: false })
-  @ApiQuery({ name: 'limit', required: false })
+  @ApiQuery({ name: 'page', required: true })
+  @ApiQuery({ name: 'limit', required: true })
   @ApiQuery({ name: 'search', required: false })
+  @ApiQuery({ name: 'externalId', required: false })
   @Get()
   async findAll(@Query() queryPaginationDto: QueryPaginationDto) {
     const result = await this.fetchServicesService.execute(queryPaginationDto);

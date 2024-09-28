@@ -12,4 +12,8 @@ export class QueryPaginationDto {
   @IsString()
   @IsOptional()
   search?: string;
+
+  @IsString()
+  @IsOptional()
+  externalId?: string;
 }
