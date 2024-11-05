@@ -17,6 +17,7 @@ export class ListSchedulesService {
     code,
     page,
     limit,
+    externalId,
   }: ListSchedulesServiceDto) {
     const whereClause = {};
 
@@ -29,6 +30,7 @@ export class ListSchedulesService {
     whereClause['assignedId'] = assignedId;
     whereClause['index'] =
       code && !isNaN(Number(code)) ? Number(code) : undefined;
+    whereClause['externalId'] = externalId;
 
     if (page && limit) {
       const [data, count] = await this.scheduleRepository.findAndCount({
@@ -56,6 +58,7 @@ export interface ListSchedulesServiceDto {
   clientId?: string;
   assignedId?: string;
   code?: string;
+  externalId?: string;
   page?: number;
   limit?: number;
 }

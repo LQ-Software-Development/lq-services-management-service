@@ -42,6 +42,7 @@ export class SchedulesController {
   @ApiQuery({ name: 'code', required: false })
   @ApiQuery({ name: 'page', required: false })
   @ApiQuery({ name: 'limit', required: false })
+  @ApiQuery({ name: 'externalId', required: false })
   @Get()
   findAll(@Query() query: ListSchedulesServiceDto) {
     let startDate: Date | undefined;
