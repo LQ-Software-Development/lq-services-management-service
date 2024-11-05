@@ -36,6 +36,9 @@ export class CreateServicesDto {
   @IsNumber()
   timeExecution: number;
 
+  @ApiPropertyOptional()
+  externalId: string;
+
   @IsNumber()
   @ApiProperty({
     example: 100,

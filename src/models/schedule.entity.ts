@@ -1,5 +1,6 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Services } from './services.entity';
+import { UpdateColumnDto } from 'src/columns/dto/update-column.dto';
 
 @Entity()
 export class Schedule {
@@ -45,4 +46,13 @@ export class Schedule {
 
   @Column({ nullable: true })
   index: number;
+
+  @Column({ nullable: true })
+  externalId?: string;
+
+  @CreateDateColumn({ nullable: true })
+  createdAt: Date;
+
+  @UpdateDateColumn({ nullable: true })
+  updatedAt: Date;
 }
