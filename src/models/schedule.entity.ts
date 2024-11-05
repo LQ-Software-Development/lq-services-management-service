@@ -51,8 +51,8 @@ export class Schedule {
   externalId?: string;
 
   @CreateDateColumn({ nullable: true })
-  createdAt: Date;
+  createdAt?: Date;
 
   @UpdateDateColumn({ nullable: true })
-  updatedAt: Date;
+  updatedAt?: Date;
 }
