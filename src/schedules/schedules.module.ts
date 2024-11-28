@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
-import { CreateSchedulesService } from './service/create-schedules.service';
-import { SchedulesController } from './schedules.controller';
-import { Schedule } from 'src/models/schedule.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ListSchedulesService } from './service/list-schedules.service';
-import { DeleteSchedulesService } from './service/delete-schedules.service';
-import { FetchScheduleService } from './service/fetch-schedule.service';
-import { UpdateScheduleService } from './service/update-schedule.service';
+import { SchedulesController } from './schedules.controller';
+import { CreateSchedulesService } from './services/create-schedules.service';
+import { ListSchedulesService } from './services/list-schedules.service';
+import { DeleteSchedulesService } from './services/delete-schedules.service';
+import { FetchScheduleService } from './services/fetch-schedule.service';
+import { UpdateScheduleService } from './services/update-schedule.service';
+import { DeleteClientSchedulesService } from './services/delete-client-schedules.service';
 import { FinancialApiProvider } from 'src/providers/financial-api.provider';
+import { Schedule } from 'src/models/schedule.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Schedule])],
@@ -19,6 +20,7 @@ import { FinancialApiProvider } from 'src/providers/financial-api.provider';
     FetchScheduleService,
     UpdateScheduleService,
     FinancialApiProvider,
+    DeleteClientSchedulesService,
   ],
 })
-export class SchedulesModule { }
+export class SchedulesModule {}

@@ -10,13 +10,14 @@ import {
 } from '@nestjs/common';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
-import { CreateSchedulesService } from './service/create-schedules.service';
+import { CreateSchedulesService } from './services/create-schedules.service';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
-import { ListSchedulesService } from './service/list-schedules.service';
+import { ListSchedulesService } from './services/list-schedules.service';
 import { ListSchedulesServiceDto } from './dto/list-schedules.dto';
-import { DeleteSchedulesService } from './service/delete-schedules.service';
-import { FetchScheduleService } from './service/fetch-schedule.service';
-import { UpdateScheduleService } from './service/update-schedule.service';
+import { DeleteSchedulesService } from './services/delete-schedules.service';
+import { FetchScheduleService } from './services/fetch-schedule.service';
+import { UpdateScheduleService } from './services/update-schedule.service';
+import { DeleteClientSchedulesService } from './services/delete-client-schedules.service';
 
 @ApiTags('schedules')
 @Controller('schedules')
@@ -27,7 +28,8 @@ export class SchedulesController {
     private readonly deleteSchedulesService: DeleteSchedulesService,
     private readonly fetchScheduleService: FetchScheduleService,
     private readonly updateScheduleService: UpdateScheduleService,
-  ) { }
+    private readonly deleteClientSchedulesService: DeleteClientSchedulesService,
+  ) {}
 
   @Post()
   create(@Body() createScheduleDto: CreateScheduleDto) {
@@ -81,5 +83,10 @@ export class SchedulesController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.deleteSchedulesService.execute(id);
+  }
+
+  @Delete('/schedules/delete-customer/:clientId')
+  async deleteClientSchedules(@Param('clientId') clientId: string) {
+    await this.deleteClientSchedulesService.execute(clientId);
   }
 }

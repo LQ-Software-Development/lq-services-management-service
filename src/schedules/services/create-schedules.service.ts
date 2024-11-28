@@ -12,7 +12,7 @@ export class CreateSchedulesService {
     @InjectRepository(Schedule)
     private scheduleRepository: Repository<Schedule>,
     private financialApiProvider: FinancialApiProvider,
-  ) { }
+  ) {}
 
   async execute(createScheduleDto: CreateScheduleDto) {
     const schedules: Array<Schedule> = [];

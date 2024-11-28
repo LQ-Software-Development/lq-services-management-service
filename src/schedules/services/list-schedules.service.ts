@@ -6,7 +6,7 @@ export class ListSchedulesService {
   constructor(
     @InjectRepository(Schedule)
     private scheduleRepository: Repository<Schedule>,
-  ) { }
+  ) {}
 
   async execute({
     startDate,
@@ -37,6 +37,7 @@ export class ListSchedulesService {
         where: whereClause,
         take: limit,
         skip: (page - 1) * limit,
+        withDeleted: false,
       });
 
       return {
@@ -47,6 +48,7 @@ export class ListSchedulesService {
 
     return this.scheduleRepository.find({
       where: whereClause,
+      withDeleted: false,
     });
   }
 }

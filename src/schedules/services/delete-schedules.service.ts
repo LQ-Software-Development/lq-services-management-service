@@ -1,7 +1,7 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Schedule } from "src/models/schedule.entity";
-import { Repository } from "typeorm";
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Schedule } from 'src/models/schedule.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class DeleteSchedulesService {

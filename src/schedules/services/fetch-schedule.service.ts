@@ -13,6 +13,7 @@ export class FetchScheduleService {
       where: {
         id,
       },
+      withDeleted: false,
       relations: ['service'],
     });
   }

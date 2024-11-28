@@ -1,6 +1,13 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Services } from './services.entity';
-import { UpdateColumnDto } from 'src/columns/dto/update-column.dto';
 
 @Entity()
 export class Schedule {
@@ -55,4 +62,7 @@ export class Schedule {
 
   @UpdateDateColumn({ nullable: true })
   updatedAt?: Date;
+
+  @DeleteDateColumn({ nullable: true })
+  deletedAt?: Date;
 }
