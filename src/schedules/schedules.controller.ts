@@ -85,7 +85,7 @@ export class SchedulesController {
     return this.deleteSchedulesService.execute(id);
   }
 
-  @Delete('/schedules/delete-customer/:clientId')
+  @Delete('/delete-customer/:clientId')
   async deleteClientSchedules(@Param('clientId') clientId: string) {
     await this.deleteClientSchedulesService.execute(clientId);
   }
