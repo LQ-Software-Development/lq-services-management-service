@@ -7,6 +7,10 @@ export class FinancialApiProvider {
   public readonly financialApiAxios: axios.Axios;
 
   constructor() {
+    if (!process.env.FINANCIAL_API_URL) {
+      this.generateFinanicialTransaction = async () => {};
+    }
+
     this.financialApiUrl = process.env.FINANCIAL_API_URL;
     this.financialApiAxios = axios.default.create({
       baseURL: this.financialApiUrl,
@@ -19,7 +23,7 @@ export class FinancialApiProvider {
     date,
     organizationId,
   }: GenerateFinanicialTransactionDto) {
-    return this.financialApiAxios.post('/transactions', {
+    await this.financialApiAxios.post('/transactions', {
       type: 'income',
       amount,
       description,
