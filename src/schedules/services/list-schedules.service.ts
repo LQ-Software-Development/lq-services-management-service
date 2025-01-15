@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Schedule } from 'src/models/schedule.entity';
-import { Between, FindOptionsWhere, ILike, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 export class ListSchedulesService {
   constructor(
@@ -20,52 +20,55 @@ export class ListSchedulesService {
     externalId,
     search,
   }: ListSchedulesServiceDto) {
-    const whereClause: FindOptionsWhere<Schedule>[] = [];
+    const queryBuilder = this.scheduleRepository.createQueryBuilder('schedule');
+
+    queryBuilder.leftJoinAndSelect('schedule.service', 'service');
 
     if (startDate && endDate) {
-      whereClause.push({ date: Between(startDate, endDate) });
+      queryBuilder.andWhere('schedule.date BETWEEN :startDate AND :endDate', {
+        startDate,
+        endDate,
+      });
     }
 
     if (organizationId) {
-      whereClause.push({ organizationId });
+      queryBuilder.andWhere('schedule.organizationId = :organizationId', {
+        organizationId,
+      });
     }
 
     if (clientId) {
-      whereClause.push({ clientId });
+      queryBuilder.andWhere('schedule.clientId = :clientId', { clientId });
     }
 
     if (assignedId) {
-      whereClause.push({ assignedId });
+      queryBuilder.andWhere('schedule.assignedId = :assignedId', {
+        assignedId,
+      });
     }
 
     if (code && !isNaN(Number(code))) {
-      whereClause.push({ index: Number(code) });
+      queryBuilder.andWhere('schedule.index = :code', { code: Number(code) });
     }
 
     if (externalId) {
-      whereClause.push({ externalId });
+      queryBuilder.andWhere('schedule.externalId = :externalId', {
+        externalId,
+      });
     }
 
     if (search && search.length > 0) {
-      whereClause.push(
-        { clientName: ILike(`%${search}%`) },
-        { description: ILike(`%${search}%`) },
-        { assignedName: ILike(`%${search}%`) },
-        { service: { name: ILike(`%${search}%`) } },
+      queryBuilder.andWhere(
+        '(schedule.clientName ILIKE :search OR schedule.description ILIKE :search OR schedule.assignedName ILIKE :search OR service.name ILIKE :search)',
+        { search: `%${search}%` },
       );
     }
 
+    queryBuilder.orderBy('schedule.date', 'DESC');
+
     if (page && limit) {
-      const [data, count] = await this.scheduleRepository.findAndCount({
-        where: whereClause,
-        take: limit,
-        skip: (page - 1) * limit,
-        withDeleted: false,
-        relations: ['service'],
-        order: {
-          date: 'DESC',
-        },
-      });
+      queryBuilder.skip((page - 1) * limit).take(limit);
+      const [data, count] = await queryBuilder.getManyAndCount();
 
       return {
         data,
@@ -73,14 +76,7 @@ export class ListSchedulesService {
       };
     }
 
-    return this.scheduleRepository.find({
-      where: whereClause,
-      withDeleted: false,
-      relations: ['service'],
-      order: {
-        date: 'DESC',
-      },
-    });
+    return queryBuilder.getMany();
   }
 }
 
