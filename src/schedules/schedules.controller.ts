@@ -29,7 +29,7 @@ export class SchedulesController {
     private readonly fetchScheduleService: FetchScheduleService,
     private readonly updateScheduleService: UpdateScheduleService,
     private readonly deleteClientSchedulesService: DeleteClientSchedulesService,
-  ) {}
+  ) { }
 
   @Post()
   create(@Body() createScheduleDto: CreateScheduleDto) {
@@ -45,6 +45,7 @@ export class SchedulesController {
   @ApiQuery({ name: 'page', required: false })
   @ApiQuery({ name: 'limit', required: false })
   @ApiQuery({ name: 'externalId', required: false })
+  @ApiQuery({ name: 'search', required: false })
   @Get()
   findAll(@Query() query: ListSchedulesServiceDto) {
     let startDate: Date | undefined;
