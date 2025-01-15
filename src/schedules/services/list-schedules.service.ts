@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Schedule } from 'src/models/schedule.entity';
-import { Between, ILike, Repository } from 'typeorm';
+import { Between, FindOptionsWhere, ILike, Repository } from 'typeorm';
 
 export class ListSchedulesService {
   constructor(
@@ -20,22 +20,34 @@ export class ListSchedulesService {
     externalId,
     search,
   }: ListSchedulesServiceDto) {
-    const whereClause = {};
-    const searchClause = [];
+    const whereClause: FindOptionsWhere<Schedule>[] = [];
 
     if (startDate && endDate) {
-      whereClause['date'] = Between(startDate, endDate);
+      whereClause.push({ date: Between(startDate, endDate) });
     }
 
-    whereClause['organizationId'] = organizationId;
-    whereClause['clientId'] = clientId;
-    whereClause['assignedId'] = assignedId;
-    whereClause['index'] =
-      code && !isNaN(Number(code)) ? Number(code) : undefined;
-    whereClause['externalId'] = externalId;
+    if (organizationId) {
+      whereClause.push({ organizationId });
+    }
+
+    if (clientId) {
+      whereClause.push({ clientId });
+    }
+
+    if (assignedId) {
+      whereClause.push({ assignedId });
+    }
+
+    if (code && !isNaN(Number(code))) {
+      whereClause.push({ index: Number(code) });
+    }
+
+    if (externalId) {
+      whereClause.push({ externalId });
+    }
 
     if (search && search.length > 0) {
-      searchClause.push(
+      whereClause.push(
         { clientName: ILike(`%${search}%`) },
         { description: ILike(`%${search}%`) },
         { assignedName: ILike(`%${search}%`) },
@@ -45,7 +57,7 @@ export class ListSchedulesService {
 
     if (page && limit) {
       const [data, count] = await this.scheduleRepository.findAndCount({
-        where: searchClause.map((clause) => ({ ...whereClause, ...clause })),
+        where: whereClause,
         take: limit,
         skip: (page - 1) * limit,
         withDeleted: false,
