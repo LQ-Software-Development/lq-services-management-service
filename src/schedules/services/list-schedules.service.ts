@@ -49,6 +49,9 @@ export class ListSchedulesService {
         skip: (page - 1) * limit,
         withDeleted: false,
         relations: ['service'],
+        order: {
+          date: 'DESC',
+        },
       });
 
       return {
@@ -61,6 +64,9 @@ export class ListSchedulesService {
       where: whereClause,
       withDeleted: false,
       relations: ['service'],
+      order: {
+        date: 'DESC',
+      },
     });
   }
 }
