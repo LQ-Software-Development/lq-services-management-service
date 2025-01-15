@@ -21,6 +21,7 @@ export class ListSchedulesService {
     search,
   }: ListSchedulesServiceDto) {
     const whereClause = {};
+    const searchClause = [];
 
     if (startDate && endDate) {
       whereClause['date'] = Between(startDate, endDate);
@@ -34,17 +35,17 @@ export class ListSchedulesService {
     whereClause['externalId'] = externalId;
 
     if (search && search.length > 0) {
-      whereClause['OR'] = [
+      searchClause.push(
         { clientName: ILike(`%${search}%`) },
         { description: ILike(`%${search}%`) },
         { assignedName: ILike(`%${search}%`) },
         { service: { name: ILike(`%${search}%`) } },
-      ];
+      );
     }
 
     if (page && limit) {
       const [data, count] = await this.scheduleRepository.findAndCount({
-        where: whereClause,
+        where: searchClause.map((clause) => ({ ...whereClause, ...clause })),
         take: limit,
         skip: (page - 1) * limit,
         withDeleted: false,
