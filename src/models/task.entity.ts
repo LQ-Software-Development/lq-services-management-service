@@ -3,85 +3,68 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { StatusColumn } from './column.entity';
+import { TaskAssignment } from './task-assignment.entity';
+import { TaskTimeLog } from './task-timing-log.entity';
+import { ApprovalCriterion } from './approval-criterion.entity';
+import { Project } from './project.entity';
 
 @Entity()
 export class Task {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
-  code: string;
-
-  @Column({ nullable: true, type: 'jsonb' })
-  client?: {
-    id: string;
-    name: string;
-    address: string;
-  };
+  @Column({ nullable: true })
+  code?: string;
 
   @Column({ nullable: true })
-  value?: number;
+  title?: string;
 
-  @Column({ nullable: true, type: 'jsonb' })
-  assignedTo?: {
-    userId: string;
-    name: string;
-    avatarUrl: string;
-  }[];
+  @Column({ nullable: true })
+  index: number;
 
   @Column({ nullable: true })
   description?: string;
 
   @Column({ nullable: true })
-  stockId?: string;
+  value?: number;
 
-  @Column({ type: 'jsonb', default: [] })
-  logs: {
-    type: string;
-    author: {
-      userId: string;
-      name: string;
-    };
-    date: Date;
-    log: string;
-  }[];
-
-  @Column({ type: 'jsonb', nullable: true })
-  services: {
-    name: string;
-    serviceId: string;
-    amount: number;
-  }[];
-
-  @Column({ nullable: true, type: 'jsonb' })
-  item?: {
-    id: string;
-    serialNumber: string;
-    name: string;
-  };
+  @OneToMany(() => TaskAssignment, (assignment) => assignment.task)
+  assignments: TaskAssignment[];
 
   @Column({ nullable: true })
-  address?: string;
+  status?: string;
 
   @Column({ nullable: true })
-  deadline?: Date;
+  priority?: string;
 
-  // Relations
-  @ManyToMany(() => StatusColumn, (column) => column.tasks)
-  columns: StatusColumn[];
+  @Column({ nullable: true })
+  dueDate?: Date;
 
-  @OneToMany(() => Task, (task) => task.parentTask)
-  subTasks: Task[];
+  @Column({ nullable: true })
+  startDate?: Date;
 
-  @ManyToOne(() => Task, (task) => task.subTasks)
-  parentTask: Task;
+  @Column({ nullable: true })
+  endDate?: Date;
+
+  @OneToMany(() => Task, (task) => task.id)
+  subtasks?: Task[];
+
+  @ManyToOne(() => Task, (task) => task.id)
+  parentTask?: Task;
+
+  @OneToMany(() => TaskTimeLog, (timeLog) => timeLog.task)
+  timeLogs: TaskTimeLog[];
+
+  @OneToMany(() => ApprovalCriterion, (criterion) => criterion.task)
+  approvalCriteria: ApprovalCriterion[];
+
+  @ManyToOne(() => Project, (project) => project.tasks)
+  project: Project;
 
   // Timestamps
   @CreateDateColumn()

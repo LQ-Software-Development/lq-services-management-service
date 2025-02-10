@@ -3,17 +3,14 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Task } from './task.entity';
-import { Board } from './board.entity';
 
 @Entity()
-export class StatusColumn {
+export class Project {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -21,20 +18,31 @@ export class StatusColumn {
   name: string;
 
   @Column()
-  isCompleted: boolean;
+  code: string;
 
   @Column({ nullable: true })
-  color?: string;
+  description?: string;
 
   @Column({ nullable: true })
-  taskLimit?: number;
+  status?: string;
 
-  @ManyToOne(() => Board, (board) => board.columns)
-  board: Board;
+  @Column({ nullable: true })
+  priority?: string;
 
-  // @ManyToMany(() => Task, (task) => task.columns)
-  // @JoinTable()
-  // tasks: Task[];
+  @Column({ nullable: true })
+  startDate?: Date;
+
+  @Column({ nullable: true })
+  price?: number;
+
+  @Column({ nullable: true })
+  deadline?: Date;
+
+  @Column({ nullable: true })
+  organizationId?: string;
+
+  @OneToMany(() => Task, (task) => task.project)
+  tasks?: Task[];
 
   @CreateDateColumn()
   createdAt: Date;
@@ -43,5 +51,5 @@ export class StatusColumn {
   updatedAt: Date;
 
   @DeleteDateColumn()
-  deletedAt?: Date;
+  deletedAt: Date;
 }

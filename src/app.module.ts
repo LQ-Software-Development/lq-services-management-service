@@ -6,7 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ServicesModule } from './services/services.module';
 import { ColumnsModule } from './columns/columns.module';
 import { StatusColumn } from './models/column.entity';
-import { TasksModule } from './tasks/tasks.module';
+import { TasksModule as ProjectTasks } from './projects/tasks/tasks.module';
 import { Task } from './models/task.entity';
 import { BoardsModule } from './boards/boards.module';
 import { Board } from './models/board.entity';
@@ -14,6 +14,15 @@ import { InventoryItemsModule } from './inventory-items/inventory-items.module';
 import { InventoryItem } from './inventory-items/entities/inventory-item.entity';
 import { SchedulesModule } from './schedules/schedules.module';
 import { Schedule } from './models/schedule.entity';
+import { ProjectsModule } from './projects/projects.module';
+import { ApprovalCriterion } from './models/approval-criterion.entity';
+import { TaskTimeLog } from './models/task-timing-log.entity';
+import { TaskAssignment } from './models/task-assignment.entity';
+import { Project } from './models/project.entity';
+import { TasksModule } from './tasks/tasks.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { OrganizationIdInterceptor } from './interceptors/organization-id.interceptor';
+import { TimeLogsModule } from './time-logs/time-logs.module';
 
 @Module({
   imports: [
@@ -21,7 +30,7 @@ import { Schedule } from './models/schedule.entity';
     TypeOrmModule.forRoot({
       type: 'postgres',
       url: process.env.DATABASE_URL,
-      entities: [Services, StatusColumn, Task, Board, InventoryItem, Schedule],
+      entities: [Services, StatusColumn, Task, Board, InventoryItem, Schedule, Project, TaskAssignment, TaskTimeLog, ApprovalCriterion],
       synchronize: true,
     }),
     ServicesModule,
@@ -30,8 +39,16 @@ import { Schedule } from './models/schedule.entity';
     BoardsModule,
     InventoryItemsModule,
     SchedulesModule,
+    ProjectsModule,
+    ProjectTasks,
+    TimeLogsModule,
   ],
   controllers: [AppController],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: OrganizationIdInterceptor,
+    },
+  ],
 })
-export class AppModule {}
+export class AppModule { }

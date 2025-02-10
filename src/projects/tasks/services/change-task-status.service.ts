@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Task } from '../../models/task.entity';
+import { Task } from '../../../models/task.entity';
 import {
   Injectable,
   InternalServerErrorException,
@@ -16,10 +16,10 @@ export class ChangeTaskStatusService {
     private readonly taskRepository: Repository<Task>,
     @InjectRepository(StatusColumn)
     private readonly statusColumnRepository: Repository<StatusColumn>,
-  ) {}
+  ) { }
 
   async execute(changeTaskStatusDto: ChangeTaskStatusDto) {
-    const { taskId, statusId } = changeTaskStatusDto;
+    const { taskId } = changeTaskStatusDto;
 
     try {
       const task = await this.taskRepository.findOne({
@@ -33,24 +33,24 @@ export class ChangeTaskStatusService {
         throw new NotFoundException('Task not found');
       }
 
-      const status = await this.statusColumnRepository.findOne({
-        where: {
-          id: statusId,
-        },
-      });
+      // const status = await this.statusColumnRepository.findOne({
+      //   where: {
+      //     id: statusId,
+      //   },
+      // });
 
-      task.columns.filter((column) => column.board.id !== status.board.id);
-      task.columns.push(status);
+      // task.columns.filter((column) => column.board.id !== status.board.id);
+      // task.columns.push(status);
 
-      await task.logs.push({
-        author: {
-          name: 'System',
-          userId: 'system',
-        },
-        date: new Date(),
-        log: 'Mudança de status',
-        type: 'INFO',
-      });
+      // await task.logs.push({
+      //   author: {
+      //     name: 'System',
+      //     userId: 'system',
+      //   },
+      //   date: new Date(),
+      //   log: 'Mudança de status',
+      //   type: 'INFO',
+      // });
 
       this.taskRepository.save(task);
     } catch (err) {

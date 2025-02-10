@@ -14,6 +14,15 @@ async function bootstrap() {
       'This is the API documentation for the LQ OS-Services Management API.',
     )
     .setVersion('1.0')
+    .addApiKey(
+      {
+        type: 'apiKey',
+        name: 'organization-id',
+        in: 'header',
+      },
+      'organization-id',
+    )
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
