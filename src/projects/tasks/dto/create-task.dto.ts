@@ -1,14 +1,37 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { randomUUID } from 'crypto';
+import { ApiPropertyOptional } from "@nestjs/swagger";
+import { randomUUID } from "crypto";
+import { IsArray, IsOptional } from "class-validator";
+
+export class TaskAssignmentDto {
+  @ApiPropertyOptional({
+    example: "user-123",
+  })
+  userId: string;
+
+  @ApiPropertyOptional({
+    example: "John Doe",
+  })
+  userName: string;
+
+  @ApiPropertyOptional({
+    example: "https://avatar.url",
+  })
+  userAvatar?: string;
+
+  @ApiPropertyOptional({
+    example: "backend",
+  })
+  role: string;
+}
 
 export class CreateTaskDto {
   @ApiPropertyOptional({
-    example: 'Tarefa de teste',
+    example: "Tarefa de teste",
   })
   title?: string;
 
   @ApiPropertyOptional({
-    example: 'Descrição da tarefa',
+    example: "Descrição da tarefa",
   })
   description?: string;
 
@@ -18,27 +41,27 @@ export class CreateTaskDto {
   value?: number;
 
   @ApiPropertyOptional({
-    example: 'PENDING',
+    example: "PENDING",
   })
   status?: string;
 
   @ApiPropertyOptional({
-    example: 'HIGH',
+    example: "HIGH",
   })
   priority?: string;
 
   @ApiPropertyOptional({
-    example: '2025-01-01',
+    example: "2025-01-01",
   })
   dueDate?: Date;
 
   @ApiPropertyOptional({
-    example: '2025-01-01',
+    example: "2025-01-01",
   })
   startDate?: Date;
 
   @ApiPropertyOptional({
-    example: '2025-01-01',
+    example: "2025-01-01",
   })
   endDate?: Date;
 
@@ -50,7 +73,7 @@ export class CreateTaskDto {
   @ApiPropertyOptional({
     example: [
       {
-        title: 'Usuário deve ser autenticado',
+        title: "Usuário deve ser autenticado",
         description: `
           Dado: O usuário está na tela de login
           Quando: O usuário insere seu email e senha
@@ -64,4 +87,18 @@ export class CreateTaskDto {
     title: string;
     description: string;
   }[];
+
+  @ApiPropertyOptional({
+    example: [
+      {
+        userId: "user-123",
+        userName: "John Doe",
+        userAvatar: "https://avatar.url",
+        role: "backend",
+      },
+    ],
+  })
+  @IsOptional()
+  @IsArray()
+  assignments?: TaskAssignmentDto[];
 }

@@ -1,21 +1,31 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Task } from '../../models/task.entity';
-import { TasksController } from './tasks.controller';
-import { CreateTaskService } from './services/create-task.service';
-import { UpdateTaskService } from './services/update-task.service';
-import { DeleteTaskService } from './services/delete-task.service';
-import { AddTaskLogService } from './services/add-task-log.service';
-import { ChangeTaskStatusService } from './services/change-task-status.service';
-import { StatusColumn } from 'src/models/column.entity';
-import { GetTasksService } from './services/get-tasks.service';
-import { GetTaskService } from './services/get-task.service';
-import { ApprovalCriterion } from 'src/models/approval-criterion.entity';
-import { Project } from 'src/models/project.entity';
-import { CountActiveTasksService } from '../../tasks/services/count-active-tasks.service';
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { Task } from "../../models/task.entity";
+import { TasksController } from "./tasks.controller";
+import { CreateTaskService } from "./services/create-task.service";
+import { UpdateTaskService } from "./services/update-task.service";
+import { DeleteTaskService } from "./services/delete-task.service";
+import { AddTaskLogService } from "./services/add-task-log.service";
+import { ChangeTaskStatusService } from "./services/change-task-status.service";
+import { StatusColumn } from "src/models/column.entity";
+import { GetTasksService } from "./services/get-tasks.service";
+import { GetTaskService } from "./services/get-task.service";
+import { ApprovalCriterion } from "src/models/approval-criterion.entity";
+import { Project } from "src/models/project.entity";
+import { CountActiveTasksService } from "../../tasks/services/count-active-tasks.service";
+import { TaskAssignment } from "src/models/task-assignment.entity";
+import { TaskAssignmentService } from "./services/task-assignment.service";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Task, StatusColumn, ApprovalCriterion, Project])],
+  imports: [
+    TypeOrmModule.forFeature([
+      Task,
+      StatusColumn,
+      ApprovalCriterion,
+      Project,
+      TaskAssignment,
+    ]),
+  ],
   controllers: [TasksController],
   providers: [
     CreateTaskService,
@@ -26,6 +36,7 @@ import { CountActiveTasksService } from '../../tasks/services/count-active-tasks
     AddTaskLogService,
     ChangeTaskStatusService,
     CountActiveTasksService,
+    TaskAssignmentService,
   ],
 })
-export class TasksModule { }
+export class TasksModule {}
