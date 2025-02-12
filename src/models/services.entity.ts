@@ -45,8 +45,8 @@ export class Services {
   @Column({ type: 'jsonb', nullable: true })
   metadata?: Record<string, any>;
 
-  @ManyToMany(() => Task, (task) => task.services)
-  tasks: Task[];
+  // @ManyToMany(() => Task, (task) => task.services)
+  // tasks: Task[];
 
   @OneToMany(() => Schedule, (schedule) => schedule.service)
   schedules: Schedule[];

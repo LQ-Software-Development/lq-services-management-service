@@ -32,9 +32,9 @@ export class StatusColumn {
   @ManyToOne(() => Board, (board) => board.columns)
   board: Board;
 
-  @ManyToMany(() => Task, (task) => task.columns)
-  @JoinTable()
-  tasks: Task[];
+  // @ManyToMany(() => Task, (task) => task.columns)
+  // @JoinTable()
+  // tasks: Task[];
 
   @CreateDateColumn()
   createdAt: Date;
