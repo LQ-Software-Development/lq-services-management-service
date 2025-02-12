@@ -7,15 +7,17 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from 'typeorm';
-import { TaskAssignment } from './task-assignment.entity';
-import { TaskTimeLog } from './task-timing-log.entity';
-import { ApprovalCriterion } from './approval-criterion.entity';
-import { Project } from './project.entity';
+} from "typeorm";
+import { TaskAssignment } from "./task-assignment.entity";
+import { TaskTimeLog } from "./task-timing-log.entity";
+import { ApprovalCriterion } from "./approval-criterion.entity";
+import { Project } from "./project.entity";
+import { TaskHistory } from "./task-history.entity";
+import { TaskComment } from "./task-comment.entity";
 
 @Entity()
 export class Task {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column({ nullable: true })
@@ -65,6 +67,12 @@ export class Task {
 
   @ManyToOne(() => Project, (project) => project.tasks)
   project: Project;
+
+  @OneToMany(() => TaskHistory, (history) => history.task)
+  history: TaskHistory[];
+
+  @OneToMany(() => TaskComment, (comment) => comment.task)
+  comments: TaskComment[];
 
   // Timestamps
   @CreateDateColumn()

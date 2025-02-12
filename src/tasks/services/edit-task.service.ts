@@ -6,12 +6,12 @@ import { Repository } from "typeorm";
 
 @Injectable()
 export class EditTaskService {
-    constructor(
-        @InjectRepository(Task)
-        private readonly taskRepository: Repository<Task>,
-    ) { }
+  constructor(
+    @InjectRepository(Task)
+    private readonly taskRepository: Repository<Task>,
+  ) {}
 
-    async execute(updateTaskDto: UpdateTaskDto) {
-        return await this.taskRepository.update(updateTaskDto.id, updateTaskDto);
-    }
+  async execute(updateTaskDto: UpdateTaskDto, id: string) {
+    return await this.taskRepository.update(id, updateTaskDto);
+  }
 }

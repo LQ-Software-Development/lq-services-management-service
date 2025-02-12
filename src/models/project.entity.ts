@@ -6,12 +6,13 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from 'typeorm';
-import { Task } from './task.entity';
+} from "typeorm";
+import { Task } from "./task.entity";
+import { Milestone } from "./milestone.entity";
 
 @Entity()
 export class Project {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column()
@@ -40,6 +41,9 @@ export class Project {
 
   @Column({ nullable: true })
   organizationId?: string;
+
+  @OneToMany(() => Milestone, (milestone) => milestone.project)
+  milestones?: Milestone[];
 
   @OneToMany(() => Task, (task) => task.project)
   tasks?: Task[];
