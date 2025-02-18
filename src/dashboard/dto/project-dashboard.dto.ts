@@ -1,3 +1,5 @@
+import { QualityMetricsDTO } from "./manager-dashboard.dto";
+
 export interface ProjectHeaderDTO {
   name: string;
   status: "NO_PRAZO" | "EM_RISCO" | "ATRASADO";
@@ -7,6 +9,12 @@ export interface ProjectHeaderDTO {
   approvalRate: number;
   totalTasks: number;
   completedTasks: number;
+  averageDeliveryTime: number;
+  qualityMetrics: {
+    reopenedTasksRate: number;
+    totalReopenedTasks: number;
+    totalCompletedTasks: number;
+  };
 }
 
 export interface TaskTimelineDTO {
@@ -46,6 +54,15 @@ export interface ProjectTrendDTO {
   approvalRate: number;
 }
 
+export interface CycleMetrics {
+  startDate: Date;
+  endDate: Date;
+  deliveredEffort: number;
+  completedTasks: number;
+  efficiency: number;
+  actualMinutes: number;
+}
+
 export interface ProjectDashboardDTO {
   header: ProjectHeaderDTO;
   timeline: TaskTimelineDTO[];
@@ -58,4 +75,6 @@ export interface ProjectDashboardDTO {
     endDate?: Date;
     taskStatus?: string[];
   };
+  cycles: CycleMetrics[];
+  qualityMetrics: QualityMetricsDTO;
 }

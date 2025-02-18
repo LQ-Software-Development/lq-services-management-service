@@ -5,6 +5,7 @@ import { Task } from "../../models/task.entity";
 import { TaskTimeLog } from "../../models/task-timing-log.entity";
 import { Project } from "../../models/project.entity";
 import {
+  CycleMetrics,
   ProjectDashboardDTO,
   ProjectHeaderDTO,
   ProjectRiskDTO,
@@ -13,6 +14,9 @@ import {
   TaskTimelineDTO,
   TimeComparisonDTO,
 } from "../dto/project-dashboard.dto";
+import { Between } from "typeorm";
+import { QualityMetricsDTO } from "../dto/manager-dashboard.dto";
+
 
 @Injectable()
 export class ProjectDashboardService {
@@ -23,7 +27,7 @@ export class ProjectDashboardService {
     private readonly timeLogRepository: Repository<TaskTimeLog>,
     @InjectRepository(Project)
     private readonly projectRepository: Repository<Project>,
-  ) {}
+  ) { }
 
   async getDashboard(
     projectId: string,
@@ -52,6 +56,8 @@ export class ProjectDashboardService {
       filters?.startDate,
       filters?.endDate,
     );
+    const cycles = await this.getProjectCycles(project);
+    const qualityMetrics = await this.getProjectQualityMetrics(project);
 
     return {
       header,
@@ -61,6 +67,8 @@ export class ProjectDashboardService {
       risks,
       trends,
       filters,
+      cycles,
+      qualityMetrics,
     };
   }
 
@@ -151,6 +159,10 @@ export class ProjectDashboardService {
           ? "EM_RISCO"
           : "NO_PRAZO";
 
+    const averageDeliveryTime = await this.calculateAverageDeliveryTime(project);
+
+    const qualityMetrics = await this.getProjectQualityMetrics(project);
+
     return {
       name: project.name,
       startDate: project.startDate,
@@ -160,7 +172,51 @@ export class ProjectDashboardService {
       approvalRate: criteriaApprovalRate,
       totalTasks,
       completedTasks,
+      averageDeliveryTime,
+      qualityMetrics,
     };
+  }
+
+  private async calculateAverageDeliveryTime(project: Project): Promise<number> {
+    // Buscar todas as tasks completadas ordenadas por data de conclusão
+    const completedTasks = await this.taskRepository.find({
+      where: {
+        project: { id: project.id },
+        status: 'COMPLETED'
+      },
+      order: {
+        updatedAt: 'ASC'
+      }
+    });
+
+    if (completedTasks.length < 2) {
+      return 0; // Não há entregas suficientes para calcular média
+    }
+
+    // Calcular a diferença de dias entre cada entrega
+    let totalDays = 0;
+    let intervals = 0;
+
+    for (let i = 1; i < completedTasks.length; i++) {
+      const currentDelivery = completedTasks[i].updatedAt;
+      const previousDelivery = completedTasks[i - 1].updatedAt;
+
+      const diffInDays = Math.ceil(
+        (currentDelivery.getTime() - previousDelivery.getTime()) /
+        (1000 * 60 * 60 * 24)
+      );
+
+      // Só considera intervalos válidos (maior que 0 e menor que 365 dias)
+      if (diffInDays > 0 && diffInDays < 365) {
+        totalDays += diffInDays;
+        intervals++;
+      }
+    }
+
+    // Retorna a média em dias (arredondada para 1 casa decimal)
+    return intervals > 0
+      ? Math.round((totalDays / intervals) * 10) / 10
+      : 0;
   }
 
   private async getTaskTimeline(
@@ -281,5 +337,103 @@ export class ProjectDashboardService {
       .groupBy("DATE(task.updatedAt)")
       .orderBy("DATE(task.updatedAt)", "ASC")
       .getRawMany();
+  }
+
+  private async getProjectCycles(project: Project): Promise<CycleMetrics[]> {
+    // Encontra a data mais antiga entre startDate do projeto e a primeira task
+    const oldestTask = await this.taskRepository.findOne({
+      where: { project: { id: project.id } },
+      order: { startDate: 'ASC' },
+    });
+
+    const startDate = oldestTask?.startDate || project.startDate;
+    if (!startDate) return [];
+
+    const cycles: CycleMetrics[] = [];
+    const CYCLE_DAYS = 15;
+    const TOTAL_CYCLES = 7;
+
+    // Calcula a data de início do ciclo mais recente
+    let currentCycleEnd = new Date();
+    currentCycleEnd.setHours(23, 59, 59, 999);
+    let currentCycleStart = new Date(currentCycleEnd);
+    currentCycleStart.setDate(currentCycleEnd.getDate() - CYCLE_DAYS + 1);
+    currentCycleStart.setHours(0, 0, 0, 0);
+
+    // Busca os últimos 7 ciclos
+    for (let i = 0; i < TOTAL_CYCLES; i++) {
+      // Se o ciclo começar antes da data mais antiga do projeto, para o loop
+      if (currentCycleStart < startDate) break;
+
+      // Busca tasks completadas neste ciclo
+      const completedTasks = await this.taskRepository.find({
+        where: {
+          project: { id: project.id },
+          status: 'COMPLETED',
+          updatedAt: Between(currentCycleStart, currentCycleEnd),
+        },
+        relations: ['timeLogs'],
+      });
+
+      // Calcula o esforço total (tempo estimado) das tasks completadas
+      const deliveredEffort = completedTasks.reduce((total, task) => {
+        return total + (task.value || 0);
+      }, 0);
+
+      // Calcula o tempo real gasto pelos desenvolvedores neste ciclo
+      const actualMinutes = completedTasks.reduce((total, task) => {
+        return total + task.timeLogs.reduce((timeTotal, log) => {
+          return timeTotal + (log.totalMinutes || 0);
+        }, 0);
+      }, 0);
+
+      // Calcula a eficiência (100% se o tempo real for igual ao estimado)
+      const efficiency = deliveredEffort > 0
+        ? Math.min((deliveredEffort / actualMinutes) * 100, 100)
+        : 0;
+
+      cycles.unshift({
+        startDate: new Date(currentCycleStart),
+        endDate: new Date(currentCycleEnd),
+        deliveredEffort,
+        completedTasks: completedTasks.length,
+        efficiency,
+        actualMinutes,
+      });
+
+      // Move para o ciclo anterior
+      currentCycleEnd = new Date(currentCycleStart);
+      currentCycleEnd.setDate(currentCycleEnd.getDate() - 1);
+      currentCycleStart = new Date(currentCycleEnd);
+      currentCycleStart.setDate(currentCycleStart.getDate() - CYCLE_DAYS + 1);
+      currentCycleStart.setHours(0, 0, 0, 0);
+    }
+
+    return cycles;
+  }
+
+  private async getProjectQualityMetrics(project: Project): Promise<QualityMetricsDTO> {
+    const completedTasks = await this.taskRepository.count({
+      where: {
+        project: { id: project.id },
+        status: 'COMPLETED'
+      }
+    });
+
+    const reopenedTasks = await this.taskRepository.count({
+      where: {
+        project: { id: project.id },
+        status: 'COMPLETED',
+        wasReopened: true
+      }
+    });
+
+    return {
+      reopenedTasksRate: completedTasks > 0
+        ? (reopenedTasks / completedTasks) * 100
+        : 0,
+      totalReopenedTasks: reopenedTasks,
+      totalCompletedTasks: completedTasks
+    };
   }
 }

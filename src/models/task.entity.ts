@@ -74,6 +74,9 @@ export class Task {
   @OneToMany(() => TaskComment, (comment) => comment.task)
   comments: TaskComment[];
 
+  @Column({ default: false })
+  wasReopened: boolean;
+
   // Timestamps
   @CreateDateColumn()
   createdAt: Date;

@@ -22,15 +22,9 @@ export interface ProjectOverviewDTO {
 }
 
 export interface QualityMetricsDTO {
-  approvalRate: number;
-  reworkRate: number;
-  averageReviewTime: number;
-  criticalFeedbacks: {
-    taskId: string;
-    projectId: string;
-    comment: string;
-    severity: "LOW" | "MEDIUM" | "HIGH";
-  }[];
+  reopenedTasksRate: number;
+  totalReopenedTasks: number;
+  totalCompletedTasks: number;
 }
 
 export interface WorkloadDTO {
