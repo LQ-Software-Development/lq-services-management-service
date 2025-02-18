@@ -14,7 +14,7 @@ export class GlobalDashboardService {
     private readonly timeLogRepository: Repository<TaskTimeLog>,
     @InjectRepository(Project)
     private readonly projectRepository: Repository<Project>,
-  ) {}
+  ) { }
 
   async getDashboard(organizationId: string) {
     // Considerando que as tasks possuem uma relação com a organização, por exemplo:
@@ -73,8 +73,8 @@ export class GlobalDashboardService {
       .map((task) =>
         task.approvalCriteria
           ? task.approvalCriteria
-              .map((criterion) => criterion.comment)
-              .filter(Boolean)
+            .map((criterion) => criterion.comment)
+            .filter(Boolean)
           : [],
       )
       .flat();

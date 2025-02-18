@@ -8,14 +8,17 @@ import { Repository } from "typeorm";
 import { ApprovalCriterion } from "../../models/approval-criterion.entity";
 import { UpdateApprovalCriterionStatusDto } from "../dto/update-approval-criterion-status.dto";
 import { EventEmitter2 } from "@nestjs/event-emitter";
+import { Task } from "src/models/task.entity";
 
 @Injectable()
 export class UpdateApprovalCriterionStatusService {
   constructor(
     @InjectRepository(ApprovalCriterion)
     private readonly approvalCriterionRepository: Repository<ApprovalCriterion>,
+    @InjectRepository(Task)
+    private readonly taskRepository: Repository<Task>,
     private readonly eventEmitter: EventEmitter2,
-  ) {}
+  ) { }
 
   async execute(
     id: string,
@@ -43,6 +46,13 @@ export class UpdateApprovalCriterionStatusService {
         reviewerId: updatedCriterion.reviewedBy,
         status: updatedCriterion.status,
       });
+
+      if (updatedCriterion.status === "REJECTED" && updatedCriterion.task.status === "COMPLETED") {
+        await this.taskRepository.update(updatedCriterion.task.id, {
+          wasReopened: true,
+          status: "IN_PROGRESS",
+        });
+      }
 
       return updatedCriterion;
     } catch (error) {

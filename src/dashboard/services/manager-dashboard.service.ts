@@ -30,7 +30,7 @@ export class ManagerDashboardService {
     private readonly timeLogRepository: Repository<TaskTimeLog>,
     @InjectRepository(ApprovalCriterion)
     private readonly approvalCriterionRepository: Repository<ApprovalCriterion>,
-  ) {}
+  ) { }
 
   async getDashboard(
     organizationId: string,
@@ -144,9 +144,9 @@ export class ManagerDashboardService {
       averageTeamPerformance:
         members.length > 0
           ? members.reduce(
-              (acc, member) => acc + Number(member.completedtasks),
-              0,
-            ) / members.length
+            (acc, member) => acc + Number(member.completedtasks),
+            0,
+          ) / members.length
           : 0,
     };
   }
@@ -238,17 +238,9 @@ export class ManagerDashboardService {
       ).length;
 
       return {
-        approvalRate: total > 0 ? (approved / total) * 100 : 0,
-        reworkRate: total > 0 ? (reworked / total) * 100 : 0,
-        averageReviewTime: 0, // Implementar se necessário
-        criticalFeedbacks: criteriaList
-          .filter((c) => c.status === "REJECTED" && c.comment)
-          .map((c) => ({
-            taskId: c.task.id,
-            projectId: c.task.project.id,
-            comment: c.comment,
-            severity: "HIGH" as const,
-          })),
+        reopenedTasksRate: total > 0 ? (reworked / total) * 100 : 0,
+        totalReopenedTasks: reworked,
+        totalCompletedTasks: approved,
       };
     };
 
