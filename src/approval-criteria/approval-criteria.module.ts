@@ -7,6 +7,7 @@ import { Task } from "src/models/task.entity";
 
 @Module({
   imports: [TypeOrmModule.forFeature([ApprovalCriterion, Task])],
+
   controllers: [ApprovalCriteriaController],
   providers: [UpdateApprovalCriterionStatusService],
 })
