@@ -89,6 +89,7 @@ export class ListTasksService {
 
     return {
       data,
+      count,
       pagination: {
         total: count,
         totalPages,
