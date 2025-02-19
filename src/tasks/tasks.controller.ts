@@ -23,7 +23,7 @@ export class TasksController {
     private readonly getTaskService: GetTaskService,
     private readonly editTaskServiec: EditTaskService,
     private readonly countActiveTasksService: CountActiveTasksService,
-  ) {}
+  ) { }
 
   @Get()
   @ApiQuery({ type: ListTasksFilterDto })

@@ -9,7 +9,7 @@ export class ListTasksService {
   constructor(
     @InjectRepository(Task)
     private readonly taskRepository: Repository<Task>,
-  ) {}
+  ) { }
 
   async execute(filters: ListTasksFilterDto, organizationId: string) {
     const query = this.taskRepository
@@ -73,10 +73,30 @@ export class ListTasksService {
       }
     }
 
-    const [data, count] = await query
-      .orderBy("task.startDate", "ASC")
-      .getManyAndCount();
+    query.orderBy("task.startDate", "ASC");
 
-    return { data, count };
+    const page = filters.page || 1;
+    const limit = filters.limit || 10;
+    const skip = (page - 1) * limit;
+
+    query.skip(skip).take(limit);
+
+    const [data, count] = await query.getManyAndCount();
+
+    const totalPages = Math.ceil(count / limit);
+    const hasNext = page < totalPages;
+    const hasPrevious = page > 1;
+
+    return {
+      data,
+      pagination: {
+        total: count,
+        totalPages,
+        currentPage: page,
+        limit,
+        hasNext,
+        hasPrevious,
+      },
+    };
   }
 }

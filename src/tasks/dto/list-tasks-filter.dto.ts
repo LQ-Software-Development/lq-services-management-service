@@ -51,4 +51,12 @@ export class ListTasksFilterDto {
   })
   @IsOptional()
   isNotComplete?: boolean;
+
+  @ApiPropertyOptional({ description: "Número da página" })
+  @IsOptional()
+  page?: number;
+
+  @ApiPropertyOptional({ description: "Limite de itens por página" })
+  @IsOptional()
+  limit?: number;
 }
