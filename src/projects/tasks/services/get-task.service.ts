@@ -13,7 +13,7 @@ export class GetTaskService {
   async execute(id: string) {
     const task = await this.taskRepository.findOne({
       where: [{ id }, { code: id }],
-      relations: ['approvalCriteria', 'project'],
+      relations: ['approvalCriteria', 'project', 'assignments'],
     });
     return task;
   }
