@@ -18,7 +18,7 @@ export class GetTaskService {
       where: {
         [isCode ? 'code' : 'id']: id,
       },
-      relations: ['approvalCriteria', 'project', 'subtasks', 'parentTask', 'timeLogs', 'comments', 'assignments'],
+      relations: ['approvalCriteria', 'project', 'assignments', 'subtasks'],
     });
     return task;
   }
