@@ -8,7 +8,7 @@ export class DeleteClientSchedulesService {
   constructor(
     @InjectRepository(Schedule)
     private readonly scheduleRepository: Repository<Schedule>,
-  ) {}
+  ) { }
 
   async execute(clientId: string): Promise<void> {
     try {

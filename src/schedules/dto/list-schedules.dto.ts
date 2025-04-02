@@ -3,6 +3,7 @@ import {
   IsOptional,
   IsDateString,
   IsNumberString,
+  IsEnum,
 } from 'class-validator';
 
 export class ListSchedulesServiceDto {
@@ -25,4 +26,20 @@ export class ListSchedulesServiceDto {
   @IsOptional()
   @IsNumberString()
   limit: string | number;
+
+  @IsOptional()
+  @IsEnum(['description', 'date'])
+  sort: 'description' | 'date';
+
+  @IsOptional()
+  @IsEnum(['asc', 'desc'])
+  order: 'asc' | 'desc';
+
+  @IsOptional()
+  @IsString()
+  search: string;
+
+  @IsOptional()
+  @IsString()
+  status: string;
 }

@@ -19,6 +19,9 @@ export class ListSchedulesService {
     limit,
     externalId,
     search,
+    sort,
+    order,
+    status,
   }: ListSchedulesServiceDto) {
     const queryBuilder = this.scheduleRepository.createQueryBuilder('schedule');
 
@@ -57,6 +60,10 @@ export class ListSchedulesService {
       });
     }
 
+    if (status) {
+      queryBuilder.andWhere('schedule.status = :status', { status });
+    }
+
     if (search && search.length > 0) {
       queryBuilder.andWhere(
         '(schedule.clientName ILIKE :search OR schedule.description ILIKE :search OR schedule.assignedName ILIKE :search OR service.name ILIKE :search)',
@@ -64,7 +71,7 @@ export class ListSchedulesService {
       );
     }
 
-    queryBuilder.orderBy('schedule.date', 'DESC');
+    queryBuilder.orderBy(`schedule.${sort || 'date'}`, order?.toUpperCase() as "ASC" | "DESC" || 'DESC');
 
     if (page && limit) {
       queryBuilder.skip((page - 1) * limit).take(limit);
@@ -91,4 +98,7 @@ export interface ListSchedulesServiceDto {
   page?: number;
   limit?: number;
   search?: string;
+  sort?: string;
+  order?: 'asc' | 'desc';
+  status?: string;
 }

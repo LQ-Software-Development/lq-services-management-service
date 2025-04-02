@@ -9,7 +9,7 @@ export class UpdateServiceService {
   constructor(
     @InjectRepository(Services)
     private readonly serviceRepository: Repository<Services>,
-  ) {}
+  ) { }
 
   async execute(id: string, data: UpdateServicesDto) {
     const service = await this.serviceRepository.findOneBy({ id });

@@ -8,9 +8,9 @@ export class DeleteSchedulesService {
   constructor(
     @InjectRepository(Schedule)
     private readonly schedulesRepository: Repository<Schedule>,
-  ) {}
+  ) { }
 
   execute(id: string) {
-    return this.schedulesRepository.delete(id);
+    return this.schedulesRepository.softDelete(id);
   }
 }

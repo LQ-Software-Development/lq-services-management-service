@@ -4,7 +4,7 @@ import { Services } from 'src/models/services.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class DeleteServiceService {
+export class DeleteServiceService {  
   constructor(
     @InjectRepository(Services)
     private readonly serviceRepository: Repository<ServiceWorker>,
