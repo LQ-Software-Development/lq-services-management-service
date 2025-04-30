@@ -7,7 +7,7 @@ Local: `docs/adrs/001-adoção-rabbitmq.md`
 ## 1. Contexto e Motivação
 
 Atualmente o serviço de gerenciamento de tarefas (`lq-services-management-service`) precisa:  
-1. Integrar-se inicialmente com outros microsserviços via eventos de domínio (por exemplo, **sales.sale.created**) para criação de tarefas e schedules.  
+1. Integrar-se inicialmente com outros microsserviços via eventos de domínio (por exemplo, **sales.sale.confirmed**) para criação de tarefas e schedules.  
 2. Posteriormente expandir para envio de notificações e outros fluxos assíncronos.  
 
 ## 2. Drivers da Decisão
@@ -59,7 +59,7 @@ Adotar a **abordagem manual** utilizando a biblioteca `amqplib` para:
   - Importa: módulos de domínio (e.g. `SchedulesModule`, `TasksModule`)
 
 - **Handler de Eventos**
-  - Serviços existentes (e.g. `SalesEventHandlerService`) renomeados para `processSaleCreated(payload: SaleCreatedDto)` sem decoradores.
+  - Serviços existentes (e.g. `SalesEventHandlerService`) renomeados para `processSaleConfirmed(payload: SaleConfirmedDto)` sem decoradores.
 
 ### 5.2 Configuração de Ambiente
 
@@ -79,7 +79,7 @@ exchange:
 
 queues:
   - name: create-tasks-schedules-queue
-    bindingKey: sales.sale.created
+    bindingKey: sales.sale.confirmed
     options:
       durable: true
       deadLetterExchange: dlx.sales
@@ -89,7 +89,7 @@ queues:
 Para facilitar a manutenção, definimos em `src/rabbitmq/rabbitmq.constants.ts` as seguintes constantes utilizadas no código:
 ```typescript
 export const RABBITMQ_EXCHANGE_NAME = 'lq_events_exchange';
-export const SALE_CREATED_ROUTING_KEY = 'sales.sale.created';
+export const SALE_CONFIRMED_ROUTING_KEY = 'sales.sale.confirmad';
 export const CREATE_TASKS_SCHEDULES_QUEUE = 'create-tasks-schedules-queue';
 ```
 
@@ -103,7 +103,7 @@ export const CREATE_TASKS_SCHEDULES_QUEUE = 'create-tasks-schedules-queue';
 
 2. **Callback de mensagem**:
    - Parseia `msg.fields.routingKey` e `JSON.parse(msg.content.toString())`.
-   - Roteia para handler apropriado (e.g. `SalesEventHandlerService.processSaleCreated(dto)`).
+   - Roteia para handler apropriado (e.g. `SalesEventHandlerService.processSaleConfirmed(dto)`).
    - On success: `channel.ack(msg)`.
    - On error: `channel.nack(msg, false, false)` (sem requeue para evitar loop).  
    - Log e métricas (Prometheus): latência, contagem de ack/nack.
@@ -127,7 +127,7 @@ export const CREATE_TASKS_SCHEDULES_QUEUE = 'create-tasks-schedules-queue';
 
 1. Implementar `RabbitmqModule` e `RabbitmqConsumerService`.  
 2. Adaptar handlers de eventos sem `@EventPattern`.  
-3. Criar DTOs (`SaleCreatedDto`) e registrar `event_history`.  
+3. Criar DTOs (`SaleConfirmedDto`) e registrar `event_history`.  
 4. Construir testes unitários e de integração (e2e) simulando mensagens RabbitMQ.  
 5. Monitoramento e dashboards (futuro ADR para alertas e SLIs).
 
