@@ -65,8 +65,17 @@ export class Task {
   @OneToMany(() => ApprovalCriterion, (criterion) => criterion.task)
   approvalCriteria: ApprovalCriterion[];
 
-  @ManyToOne(() => Project, (project) => project.tasks)
-  project: Project;
+  @Column({ nullable: true })
+  organizationId?: string;
+
+  @Column({ nullable: true })
+  customerId?: string;
+
+  @Column({ type: 'jsonb', nullable: true })
+  customerData?: Record<string, any>;
+
+  @ManyToOne(() => Project, (project) => project.tasks, { nullable: true })
+  project?: Project;
 
   @OneToMany(() => TaskHistory, (history) => history.task)
   history: TaskHistory[];

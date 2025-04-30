@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsString, IsUUID, IsOptional, IsArray, ValidateNested, IsPositive, IsDateString } from 'class-validator';
+import { IsString, IsUUID, IsOptional, IsArray, ValidateNested, IsPositive, IsDateString, IsObject } from 'class-validator';
 
 export class SaleConfirmedDto {
     @ApiProperty({ description: 'Identificador único da venda' })
@@ -8,9 +8,28 @@ export class SaleConfirmedDto {
     id: string;
 
     @ApiProperty({ description: 'ID da organização', required: false })
-    @IsUUID()
+    @IsString()
     @IsOptional()
     organizationId?: string;
+
+    @ApiProperty({ description: 'Data do pedido' })
+    @IsDateString()
+    date: Date;
+
+    @ApiProperty({ description: 'Dados do cliente' })
+    @IsObject()
+    @IsOptional()
+    customer?: Record<string, any>;
+
+    @ApiProperty({ description: 'Id do cliente' })
+    @IsString()
+    @IsOptional()
+    customerId?: string;
+
+    @ApiProperty({ description: 'Id do projeto' })
+    @IsUUID()
+    @IsOptional()
+    projectId?: string;
 
     @ApiProperty({ description: 'Itens do pedido' })
     @IsArray()
@@ -28,17 +47,14 @@ export class SaleConfirmedItemDto {
     @IsString()
     itemName: string;
 
-    @ApiProperty({ description: 'ID do projeto' })
-    @IsOptional()
-    @IsPositive()
-    durationInMinutes: number;
-
-
-    @ApiProperty({ description: 'Data de início do serviço' })
-    @IsDateString()
-    date: Date;
-
     @ApiProperty({ description: 'Tipo de item' })
     @IsString()
     type: 'service' | 'product';
+
+    @ApiProperty({ description: 'Dados adicionais do item' })
+    @IsObject()
+    @IsOptional()
+    metadata?: {
+        scheduledAt?: string;
+    };
 }
