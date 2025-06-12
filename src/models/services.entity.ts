@@ -5,22 +5,20 @@ import {
   DeleteDateColumn,
   UpdateDateColumn,
   CreateDateColumn,
-  ManyToMany,
   OneToMany,
-} from 'typeorm';
-import { Task } from './task.entity';
-import { Schedule } from './schedule.entity';
+} from "typeorm";
+import { Schedule } from "./schedule.entity";
 
 @Entity()
 export class Services {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column({ nullable: true })
   index: number;
 
   @Column({
-    nullable: process.env.SAAS_MODE === 'true' ? false : true,
+    nullable: process.env.SAAS_MODE === "true" ? false : true,
   })
   externalId: string;
 
@@ -33,7 +31,7 @@ export class Services {
   @Column()
   timeExecution: number;
 
-  @Column()
+  @Column({ type: "decimal", precision: 10, scale: 2 })
   servicePrice: number;
 
   @Column({ nullable: true })
@@ -42,11 +40,8 @@ export class Services {
   @Column({ default: true })
   status: boolean;
 
-  @Column({ type: 'jsonb', nullable: true })
+  @Column({ type: "jsonb", nullable: true })
   metadata?: Record<string, any>;
-
-  // @ManyToMany(() => Task, (task) => task.services)
-  // tasks: Task[];
 
   @OneToMany(() => Schedule, (schedule) => schedule.service)
   schedules: Schedule[];
