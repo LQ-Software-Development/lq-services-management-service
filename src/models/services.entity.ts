@@ -31,7 +31,7 @@ export class Services {
   @Column()
   timeExecution: number;
 
-  @Column({ type: "decimal", precision: 10, scale: 2 })
+  @Column({ type: "decimal", precision: 10, scale: 2, nullable: true })
   servicePrice: number;
 
   @Column({ nullable: true })
