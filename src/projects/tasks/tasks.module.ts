@@ -38,5 +38,6 @@ import { TaskAssignmentService } from "./services/task-assignment.service";
     CountActiveTasksService,
     TaskAssignmentService,
   ],
+  exports: [CreateTaskService],
 })
-export class TasksModule {}
+export class TasksModule { }

@@ -16,7 +16,7 @@ export class ListTasksService {
       .createQueryBuilder("task")
       .leftJoinAndSelect("task.project", "project")
       .leftJoinAndSelect("task.assignments", "assignments")
-      .where("project.organizationId = :organizationId", { organizationId });
+      .where("project.organizationId = :organizationId OR task.organizationId = :organizationId", { organizationId });
 
     if (filters.userId) {
       query.andWhere("assignments.userId = :userId", {
