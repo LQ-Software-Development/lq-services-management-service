@@ -20,9 +20,24 @@ export class CreateSchedulesService {
       organizationId: createScheduleDto.organizationId,
     });
 
+    function addInterval(date: Date, amount: number, intervalType: string): Date {
+      switch (intervalType) {
+        case 'week':
+          return addDays(date, amount * 7);
+        case 'month':
+          return new Date(date.getFullYear(), date.getMonth() + amount, date.getDate());
+        case 'quinzena':
+          return addDays(date, amount * 15);
+        case 'day':
+        default:
+          return addDays(date, amount);
+      }
+    }
+
     if (createScheduleDto.eachDayRepeat && createScheduleDto.finalRepeatDate) {
       const finalRepeatDate = new Date(createScheduleDto.finalRepeatDate);
       let date = new Date(createScheduleDto.date);
+      const intervalType = createScheduleDto.intervalType || 'day';
 
       while (date <= finalRepeatDate) {
         schedulesCount++;
@@ -33,7 +48,7 @@ export class CreateSchedulesService {
           date: date,
         });
 
-        date = addDays(date, createScheduleDto.eachDayRepeat);
+        date = addInterval(date, createScheduleDto.eachDayRepeat, intervalType);
       }
     } else {
       delete createScheduleDto.eachDayRepeat;
