@@ -3,7 +3,7 @@ import { CreateScheduleDto } from '../dto/create-schedule.dto';
 import { Schedule } from 'src/models/schedule.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm/repository/Repository';
-import { addDays } from 'date-fns';
+import { addDays, addMonths } from 'date-fns';
 import { FinancialApiProvider } from 'src/providers/financial-api.provider';
 
 @Injectable()
@@ -25,7 +25,7 @@ export class CreateSchedulesService {
         case 'week':
           return addDays(date, amount * 7);
         case 'month':
-          return new Date(date.getFullYear(), date.getMonth() + amount, date.getDate());
+          return addMonths(date, amount)
         case 'quinzena':
           return addDays(date, amount * 15);
         case 'day':
