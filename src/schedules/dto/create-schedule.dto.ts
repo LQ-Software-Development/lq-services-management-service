@@ -54,6 +54,14 @@ export class CreateScheduleDto {
   @IsOptional()
   eachDayRepeat?: number;
 
+  @ApiPropertyOptional({
+    enum: ['day', 'week', 'month', 'quinzena', 'year'],
+    default: 'day',
+    description: "Type of interval for repetition. Defaults to 'day'. Supported: 'day', 'week', 'month', 'quinzena' (15 days), 'year', etc."
+  })
+  @IsString()
+  @IsOptional()
+  intervalType: string = 'day';
   @ApiPropertyOptional()
   @IsDateString()
   @IsOptional()
