@@ -81,7 +81,7 @@ export class ListSchedulesService {
               (
                 schedule.metadata->'yachts' IS NOT NULL AND jsonb_typeof(schedule.metadata->'yachts') = 'array' AND EXISTS (
                   SELECT 1 FROM jsonb_array_elements(schedule.metadata->'yachts') AS yacht
-                  WHERE yacht->>'model' ILIKE :search
+                      WHERE yacht->>'model' ILIKE :searchYacht
                 )
               )
             )`,
