@@ -31,7 +31,7 @@ export class CreateSchedulesService {
         case "month":
           return addMonths(date, amount);
         case "bi-weekly":
-          return addWeeks(date, amount * 2);
+          return addDays(date, amount * 15);
         case "year":
           return addYears(date, amount);
         case "day":
