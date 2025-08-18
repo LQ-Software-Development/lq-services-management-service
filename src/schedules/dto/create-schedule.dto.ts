@@ -4,8 +4,8 @@ import {
   IsObject,
   IsOptional,
   IsString,
-} from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+} from "class-validator";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
 export class CreateScheduleDto {
   @ApiProperty()
@@ -55,13 +55,14 @@ export class CreateScheduleDto {
   eachDayRepeat?: number;
 
   @ApiPropertyOptional({
-    enum: ['day', 'week', 'month', 'quinzena', 'year'],
-    default: 'day',
-    description: "Type of interval for repetition. Defaults to 'day'. Supported: 'day', 'week', 'month', 'quinzena' (15 days), 'year', etc."
+    enum: ["day", "week", "month", "bi-weekly", "year"],
+    default: "day",
+    description:
+      "Type of interval for repetition. Defaults to 'day'. Supported: 'day', 'week', 'month', 'bi-weekly', 'year', etc.",
   })
   @IsString()
   @IsOptional()
-  intervalType: string = 'day';
+  intervalType: string = "day";
   @ApiPropertyOptional()
   @IsDateString()
   @IsOptional()
@@ -74,7 +75,7 @@ export class CreateScheduleDto {
 
   @ApiPropertyOptional({
     example: {
-      key: 'value',
+      key: "value",
     },
   })
   @IsObject()
