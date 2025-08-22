@@ -30,6 +30,7 @@ import { EventEmitterModule } from "@nestjs/event-emitter";
 import { DashboardModule } from "./dashboard/dashboard.module";
 import { Milestone } from "./models/milestone.entity";
 import { TaskComment } from "./models/task-comment.entity";
+import { RabbitmqModule } from "./rabbitmq/rabbitmq.module";
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -68,6 +69,7 @@ import { TaskComment } from "./models/task-comment.entity";
     EventEmitterModule.forRoot({
       // configurações opcionais, caso necessário
     }),
+    RabbitmqModule,
   ],
   controllers: [AppController],
   providers: [
@@ -77,4 +79,4 @@ import { TaskComment } from "./models/task-comment.entity";
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }
