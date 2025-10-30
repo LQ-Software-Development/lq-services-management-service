@@ -16,6 +16,8 @@ export class AssignedIdGuard implements CanActivate {
     const participantId = request["user"]?.participantId;
     const assignedId = request.body?.assignedId;
 
+    console.log(participantId, assignedId);
+
     if (!participantId || !assignedId) {
       throw new ForbiddenException("Missing participantId or assignedId");
     }
