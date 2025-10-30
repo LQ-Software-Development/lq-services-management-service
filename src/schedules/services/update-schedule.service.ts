@@ -1,8 +1,8 @@
-import { InjectRepository } from '@nestjs/typeorm';
-import { Schedule } from 'src/models/schedule.entity';
-import { Repository } from 'typeorm';
-import { UpdateScheduleDto } from '../dto/update-schedule.dto';
-import { NotFoundException } from '@nestjs/common';
+import { InjectRepository } from "@nestjs/typeorm";
+import { Schedule } from "src/models/schedule.entity";
+import { Repository } from "typeorm";
+import { UpdateScheduleDto } from "../dto/update-schedule.dto";
+import { NotFoundException } from "@nestjs/common";
 
 export class UpdateScheduleService {
   constructor(
@@ -18,13 +18,23 @@ export class UpdateScheduleService {
     updateScheduleDto: UpdateScheduleDto;
   }) {
     const schedule = await this.scheduleRepository.findOne({
-      where: {
-        id,
-      },
+      where: { id },
     });
 
     if (!schedule) {
-      throw new NotFoundException('Schedule not found');
+      throw new NotFoundException("Schedule not found");
+    }
+
+    const participantId = updateScheduleDto["participantId"];
+    if (
+      schedule.status === "in-progress" &&
+      participantId &&
+      schedule.assignedId &&
+      participantId !== schedule.assignedId
+    ) {
+      throw new Error(
+        "Only the schedule owner can update when status is in-progress",
+      );
     }
 
     return this.scheduleRepository.save({
