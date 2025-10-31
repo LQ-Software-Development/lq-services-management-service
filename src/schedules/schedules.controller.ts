@@ -19,8 +19,7 @@ import { DeleteSchedulesService } from "./services/delete-schedules.service";
 import { FetchScheduleService } from "./services/fetch-schedule.service";
 import { UpdateScheduleService } from "./services/update-schedule.service";
 import { DeleteClientSchedulesService } from "./services/delete-client-schedules.service";
-import { JwtAuthGuard } from "../guards/jwt-auth.guard";
-import { AssignedIdGuard } from "../guards/assigned-id.guard";
+import { ScheduleUpdateGuard } from "../guards/schedule-update.guard";
 
 @ApiTags("schedules")
 @Controller("schedules")
@@ -80,7 +79,7 @@ export class SchedulesController {
   }
 
   @Put(":id")
-  @UseGuards(JwtAuthGuard, AssignedIdGuard)
+  @UseGuards(ScheduleUpdateGuard)
   async update(
     @Param("id") id: string,
     @Body() updateScheduleDto: UpdateScheduleDto,

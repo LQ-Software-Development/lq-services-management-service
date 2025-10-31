@@ -10,6 +10,7 @@ import { UpdateScheduleService } from "./services/update-schedule.service";
 import { DeleteClientSchedulesService } from "./services/delete-client-schedules.service";
 import { FinancialApiProvider } from "src/providers/financial-api.provider";
 import { Schedule } from "src/models/schedule.entity";
+import { ScheduleUpdateGuard } from "../guards/schedule-update.guard";
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { Schedule } from "src/models/schedule.entity";
     UpdateScheduleService,
     FinancialApiProvider,
     DeleteClientSchedulesService,
+    ScheduleUpdateGuard,
   ],
 })
 export class SchedulesModule {}
