@@ -37,27 +37,27 @@ export class ScheduleUpdateGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
+    let payload: any;
     try {
-      const payload = await this.jwtService.verifyAsync(token, {
+      payload = await this.jwtService.verifyAsync(token, {
         secret: process.env.JWT_SECRET,
       });
       console.log(payload);
+      const userId = payload.userId || payload.sub || payload.sub?.userId;
       request["user"] = {
-        userId: payload["userId"],
-        participantId: payload["participantId"],
+        userId,
       };
     } catch {
       throw new UnauthorizedException();
     }
 
-    const participantId = request["user"]?.participantId;
-    const assignedId = request.body?.assignedId;
+    const userIdentifiers = [
+      request["user"]?.userId,
+      payload.sub,
+      payload.sub?.userId,
+    ].filter(Boolean);
 
-    if (!participantId || !assignedId) {
-      throw new ForbiddenException("Missing participantId or assignedId");
-    }
-
-    if (participantId !== assignedId) {
+    if (!userIdentifiers.includes(schedule.assignedId)) {
       throw new ForbiddenException("User is not the owner of this resource");
     }
 
