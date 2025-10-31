@@ -42,8 +42,11 @@ export class ScheduleUpdateGuard implements CanActivate {
       payload = await this.jwtService.verifyAsync(token, {
         secret: process.env.JWT_SECRET,
       });
-      console.log(payload);
-      const userId = payload.userId || payload.sub || payload.sub?.userId;
+      const userId =
+        payload.userId ||
+        payload.sub ||
+        payload.sub?.userId ||
+        payload.accesses[0]?.id;
       request["user"] = {
         userId,
       };
@@ -51,10 +54,13 @@ export class ScheduleUpdateGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
+    console.log(payload);
+
     const userIdentifiers = [
       request["user"]?.userId,
       payload.sub,
       payload.sub?.userId,
+      payload.accesses?.[0]?.id,
     ].filter(Boolean);
 
     if (!userIdentifiers.includes(schedule.assignedId)) {
