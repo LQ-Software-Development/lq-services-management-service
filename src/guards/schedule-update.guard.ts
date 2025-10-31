@@ -29,7 +29,7 @@ export class ScheduleUpdateGuard implements CanActivate {
       throw new ForbiddenException("Schedule not found");
     }
 
-    if (schedule.status !== "in-progress") {
+    if (schedule.status !== "in-progress" || !schedule.externalId) {
       return true;
     }
 
