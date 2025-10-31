@@ -42,11 +42,7 @@ export class ScheduleUpdateGuard implements CanActivate {
       payload = await this.jwtService.verifyAsync(token, {
         secret: process.env.JWT_SECRET,
       });
-      const userId =
-        payload.userId ||
-        payload.sub ||
-        payload.sub?.userId ||
-        payload.accesses[0]?.id;
+      const userId = payload.id || payload._id || payload.sub;
       request["user"] = {
         userId,
       };
@@ -54,16 +50,13 @@ export class ScheduleUpdateGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
-    console.log(payload);
-
     const userIdentifiers = [
-      request["user"]?.userId,
+      request["user"]?.id,
+      payload._id,
       payload.sub,
-      payload.sub?.userId,
-      payload.accesses?.[0]?.id,
     ].filter(Boolean);
 
-    if (!userIdentifiers.includes(schedule.assignedId)) {
+    if (!userIdentifiers.includes(schedule.externalId)) {
       throw new ForbiddenException("User is not the owner of this resource");
     }
 
