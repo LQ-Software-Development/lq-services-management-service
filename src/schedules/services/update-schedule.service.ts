@@ -18,9 +18,7 @@ export class UpdateScheduleService {
     updateScheduleDto: UpdateScheduleDto;
   }) {
     const schedule = await this.scheduleRepository.findOne({
-      where: {
-        id,
-      },
+      where: { id },
     });
 
     const typeSchedule = schedule?.metadata?.services?.[0]?.name
@@ -37,6 +35,19 @@ export class UpdateScheduleService {
 
     if (!schedule) {
       throw new NotFoundException("Schedule not found");
+    }
+
+    if (schedule.status === "in-progress") {
+      const participantId = updateScheduleDto["participantId"];
+      if (
+        participantId &&
+        schedule.assignedId &&
+        participantId !== schedule.assignedId
+      ) {
+        throw new Error(
+          "Only the schedule owner can update when status is in-progress",
+        );
+      }
     }
 
     return this.scheduleRepository.save({
