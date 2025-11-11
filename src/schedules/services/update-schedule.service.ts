@@ -1,8 +1,8 @@
-import { InjectRepository } from '@nestjs/typeorm';
-import { Schedule } from 'src/models/schedule.entity';
-import { Repository } from 'typeorm';
-import { UpdateScheduleDto } from '../dto/update-schedule.dto';
-import { NotFoundException } from '@nestjs/common';
+import { InjectRepository } from "@nestjs/typeorm";
+import { Schedule } from "src/models/schedule.entity";
+import { Repository } from "typeorm";
+import { UpdateScheduleDto } from "../dto/update-schedule.dto";
+import { NotFoundException } from "@nestjs/common";
 
 export class UpdateScheduleService {
   constructor(
@@ -23,8 +23,20 @@ export class UpdateScheduleService {
       },
     });
 
+    const typeSchedule = schedule?.metadata?.services?.[0]?.name
+      ?.toLowerCase()
+      ?.includes("system check");
+
+    if (
+      !typeSchedule &&
+      updateScheduleDto.metadata &&
+      "systemCheck" in updateScheduleDto.metadata
+    ) {
+      delete updateScheduleDto.metadata.systemCheck;
+    }
+
     if (!schedule) {
-      throw new NotFoundException('Schedule not found');
+      throw new NotFoundException("Schedule not found");
     }
 
     return this.scheduleRepository.save({
