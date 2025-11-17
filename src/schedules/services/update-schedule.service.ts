@@ -21,6 +21,18 @@ export class UpdateScheduleService {
       where: { id },
     });
 
+    const typeSchedule = schedule?.metadata?.services?.[0]?.name
+      ?.toLowerCase()
+      ?.includes("system check");
+
+    if (
+      !typeSchedule &&
+      updateScheduleDto.metadata &&
+      "systemCheck" in updateScheduleDto.metadata
+    ) {
+      delete updateScheduleDto.metadata.systemCheck;
+    }
+
     if (!schedule) {
       throw new NotFoundException("Schedule not found");
     }
