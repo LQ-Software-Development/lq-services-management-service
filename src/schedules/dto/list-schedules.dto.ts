@@ -4,7 +4,9 @@ import {
   IsDateString,
   IsNumberString,
   IsEnum,
+  IsArray,
 } from "class-validator";
+import { Transform } from "class-transformer";
 
 export class ListSchedulesServiceDto {
   @IsOptional()
@@ -43,7 +45,14 @@ export class ListSchedulesServiceDto {
   @IsString()
   searchYacht: string;
 
+  @Transform(({ value }) => {
+    if (value === null || value === undefined) {
+      return undefined;
+    }
+    return Array.isArray(value) ? value : [value];
+  })
   @IsOptional()
-  @IsString()
-  status: string;
+  @IsArray()
+  @IsString({ each: true })
+  status?: string | string[];
 }

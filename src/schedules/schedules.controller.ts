@@ -50,7 +50,13 @@ export class SchedulesController {
   @ApiQuery({ name: "search", required: false })
   @ApiQuery({ name: "sort", example: "date", enum: ["date", "description"] })
   @ApiQuery({ name: "order", example: "asc", enum: ["asc", "desc"] })
-  @ApiQuery({ name: "status", example: "open" })
+  @ApiQuery({
+    name: "status",
+    required: false,
+    isArray: true,
+    type: String,
+    example: ["open", "inprogress"],
+  })
   @Get()
   findAll(@Query() query: ListSchedulesServiceDto) {
     let startDate: Date | undefined;
