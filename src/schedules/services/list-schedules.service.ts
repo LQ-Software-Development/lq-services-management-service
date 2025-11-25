@@ -62,7 +62,10 @@ export class ListSchedulesService {
     }
 
     if (status) {
-      queryBuilder.andWhere("schedule.status = :status", { status });
+      const statuses = Array.isArray(status) ? status : [status];
+      queryBuilder.andWhere("schedule.status IN (:...statuses)", {
+        statuses,
+      });
     }
 
     if (search && search.length > 0) {
@@ -122,5 +125,5 @@ export interface ListSchedulesServiceDto {
   sort?: string;
   searchYacht?: string;
   order?: "asc" | "desc";
-  status?: string;
+  status?: string | string[];
 }
