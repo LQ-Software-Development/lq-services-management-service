@@ -20,8 +20,8 @@ import { TaskTimeLog } from "./models/task-timing-log.entity";
 import { TaskAssignment } from "./models/task-assignment.entity";
 import { Project } from "./models/project.entity";
 import { TasksModule } from "./tasks/tasks.module";
-import { APP_INTERCEPTOR } from "@nestjs/core";
-import { OrganizationIdInterceptor } from "./interceptors/organization-id.interceptor";
+// import { APP_INTERCEPTOR } from "@nestjs/core";
+// import { OrganizationIdInterceptor } from "./interceptors/organization-id.interceptor";
 import { TimeLogsModule } from "./time-logs/time-logs.module";
 import { ApprovalCriteriaModule } from "./approval-criteria/approval-criteria.module";
 import { TaskHistory } from "./models/task-history.entity";
@@ -70,11 +70,11 @@ import { TaskComment } from "./models/task-comment.entity";
     }),
   ],
   controllers: [AppController],
-  providers: [
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: OrganizationIdInterceptor,
-    },
-  ],
+  // providers: [
+  //   {
+  //     provide: APP_INTERCEPTOR,
+  //     useClass: OrganizationIdInterceptor,
+  //   },
+  // ],
 })
 export class AppModule {}
