@@ -23,6 +23,8 @@ export class ListSchedulesService {
     sort,
     order,
     status,
+    serviceType,
+    vanId,
   }: ListSchedulesServiceDto) {
     const queryBuilder = this.scheduleRepository.createQueryBuilder("schedule");
 
@@ -89,6 +91,24 @@ export class ListSchedulesService {
       );
     }
 
+    if (serviceType && serviceType.length > 0) {
+      queryBuilder.andWhere(
+        "LOWER(schedule.metadata->>'role') = LOWER(:serviceType)",
+        { serviceType },
+      );
+    }
+
+    if (vanId && vanId.length > 0) {
+      queryBuilder.andWhere(
+        `(
+          schedule.assignedId = :vanId OR
+          schedule.metadata->>'assignedId' = :vanId OR
+          schedule.metadata->>'participantId' = :vanId
+        )`,
+        { vanId },
+      );
+    }
+
     queryBuilder.orderBy(
       `schedule.${sort || "date"}`,
       (order?.toUpperCase() as "ASC" | "DESC") || "DESC",
@@ -123,4 +143,6 @@ export interface ListSchedulesServiceDto {
   searchYacht?: string;
   order?: "asc" | "desc";
   status?: string;
+  serviceType?: string;
+  vanId?: string;
 }
