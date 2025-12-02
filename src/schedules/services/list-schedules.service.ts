@@ -93,8 +93,18 @@ export class ListSchedulesService {
 
     if (serviceType && serviceType.length > 0) {
       queryBuilder.andWhere(
-        "LOWER(schedule.metadata->>'role') = LOWER(:serviceType)",
-        { serviceType },
+        `(
+          (
+            schedule.metadata->'services' IS NOT NULL AND
+            jsonb_typeof(schedule.metadata->'services') = 'array' AND
+            EXISTS (
+              SELECT 1 FROM jsonb_array_elements(schedule.metadata->'services') AS service
+              WHERE service->>'name' ILIKE :serviceType
+            )
+          ) OR
+          (schedule.metadata->>'role' ILIKE :serviceType)
+        )`,
+        { serviceType: `%${serviceType}%` },
       );
     }
 
