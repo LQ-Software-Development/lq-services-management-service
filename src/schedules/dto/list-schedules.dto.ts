@@ -46,4 +46,12 @@ export class ListSchedulesServiceDto {
   @IsOptional()
   @IsString()
   status: string;
+
+  @IsOptional()
+  @IsString()
+  serviceType?: string;
+
+  @IsOptional()
+  @IsString()
+  vanId?: string;
 }
