@@ -50,15 +50,15 @@ export class ScheduleUpdateGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
-    const userIdentifiers = [
-      request["user"]?.id,
-      payload._id,
-      payload.sub,
-    ].filter(Boolean);
+    // const userIdentifiers = [
+    //   request["user"]?.id,
+    //   payload._id,
+    //   payload.sub,
+    // ].filter(Boolean);
 
-    if (!userIdentifiers.includes(schedule.externalId)) {
-      throw new ForbiddenException("User is not the owner of this resource");
-    }
+    // if (!userIdentifiers.includes(schedule.externalId)) {
+    //   throw new ForbiddenException("User is not the owner of this resource");
+    // }
 
     return true;
   }
