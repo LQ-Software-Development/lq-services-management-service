@@ -40,29 +40,65 @@ export class CreateSchedulesService {
       }
     }
 
+    // Helper function to get indexDay for a specific date
+    const getIndexDayForDate = async (date: Date): Promise<number> => {
+      const startOfDay = new Date(date);
+      startOfDay.setHours(0, 0, 0, 0);
+      const endOfDay = new Date(date);
+      endOfDay.setHours(23, 59, 59, 999);
+
+      const count = await this.scheduleRepository
+        .createQueryBuilder("schedule")
+        .where("schedule.organizationId = :organizationId", {
+          organizationId: createScheduleDto.organizationId,
+        })
+        .andWhere("schedule.date >= :startOfDay", { startOfDay })
+        .andWhere("schedule.date <= :endOfDay", { endOfDay })
+        .andWhere("schedule.deletedAt IS NULL")
+        .getCount();
+
+      return count + 1;
+    };
+
     if (createScheduleDto.eachDayRepeat && createScheduleDto.finalRepeatDate) {
       const finalRepeatDate = new Date(createScheduleDto.finalRepeatDate);
       let date = new Date(createScheduleDto.date);
       const intervalType = createScheduleDto.intervalType || "day";
 
+      // Group schedules by date to calculate indexDay
+      const schedulesByDate: Record<string, number> = {};
+
       while (date <= finalRepeatDate) {
         schedulesCount++;
+        const dateKey = date.toISOString().split("T")[0];
+
+        // Initialize or increment the counter for this date
+        if (!schedulesByDate[dateKey]) {
+          schedulesByDate[dateKey] = await getIndexDayForDate(date);
+        }
 
         schedules.push({
           ...createScheduleDto,
           index: schedulesCount,
+          indexDay: schedulesByDate[dateKey],
           date: date,
         });
 
+        schedulesByDate[dateKey]++;
         date = addInterval(date, createScheduleDto.eachDayRepeat, intervalType);
       }
     } else {
       delete createScheduleDto.eachDayRepeat;
       delete createScheduleDto.finalRepeatDate;
 
+      const indexDay = await getIndexDayForDate(
+        new Date(createScheduleDto.date),
+      );
+
       schedules.push({
         ...createScheduleDto,
         index: schedulesCount + 1,
+        indexDay: indexDay,
         date: new Date(createScheduleDto.date),
       });
     }
