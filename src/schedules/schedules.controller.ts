@@ -20,7 +20,9 @@ import { FetchScheduleService } from "./services/fetch-schedule.service";
 import { UpdateScheduleService } from "./services/update-schedule.service";
 import { DeleteClientSchedulesService } from "./services/delete-client-schedules.service";
 import { ReorderSchedulesService } from "./services/reorder-schedules.service";
+import { ReorderSchedulesDayService } from "./services/reorder-schedules-day.service";
 import { ReorderSchedulesDto } from "./dto/reorder-schedules.dto";
+import { ReorderSchedulesDayDto } from "./dto/reorder-schedules-day.dto";
 import { ScheduleUpdateGuard } from "../guards/schedule-update.guard";
 
 @ApiTags("schedules")
@@ -34,6 +36,7 @@ export class SchedulesController {
     private readonly updateScheduleService: UpdateScheduleService,
     private readonly deleteClientSchedulesService: DeleteClientSchedulesService,
     private readonly reorderSchedulesService: ReorderSchedulesService,
+    private readonly reorderSchedulesDayService: ReorderSchedulesDayService,
   ) {}
 
   @Post()
@@ -81,6 +84,11 @@ export class SchedulesController {
   @Put("reorder")
   reorder(@Body() reorderSchedulesDto: ReorderSchedulesDto) {
     return this.reorderSchedulesService.execute(reorderSchedulesDto);
+  }
+
+  @Put("reorder-day")
+  reorderDay(@Body() reorderSchedulesDayDto: ReorderSchedulesDayDto) {
+    return this.reorderSchedulesDayService.execute(reorderSchedulesDayDto);
   }
 
   @Get(":id")

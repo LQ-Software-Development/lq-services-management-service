@@ -6,12 +6,12 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from 'typeorm';
-import { Services } from './services.entity';
+} from "typeorm";
+import { Services } from "./services.entity";
 
 @Entity()
 export class Schedule {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   id?: string;
 
   @Column({ nullable: true })
@@ -48,11 +48,14 @@ export class Schedule {
   @ManyToOne(() => Services, (service) => service.schedules)
   service?: Services;
 
-  @Column({ nullable: true, type: 'jsonb' })
+  @Column({ nullable: true, type: "jsonb" })
   metadata?: Record<string, any>;
 
   @Column({ nullable: true })
   index: number;
+
+  @Column({ nullable: true })
+  indexDay: number;
 
   @Column({ nullable: true })
   externalId?: string;

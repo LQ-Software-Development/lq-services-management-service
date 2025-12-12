@@ -50,9 +50,35 @@ export class UpdateScheduleService {
       }
     }
 
+    // Check if date is being changed
+    let newIndexDay = schedule.indexDay;
+    if (updateScheduleDto.date && updateScheduleDto.date !== schedule.date) {
+      // Date is changing, recalculate indexDay for the new date
+      const newDate = new Date(updateScheduleDto.date);
+      const startOfDay = new Date(newDate);
+      startOfDay.setHours(0, 0, 0, 0);
+      const endOfDay = new Date(newDate);
+      endOfDay.setHours(23, 59, 59, 999);
+
+      // Get the max indexDay for the new date and add 1 (append to end)
+      const maxIndexDay = await this.scheduleRepository
+        .createQueryBuilder("schedule")
+        .select("MAX(schedule.indexDay)", "max")
+        .where("schedule.organizationId = :organizationId", {
+          organizationId: schedule.organizationId,
+        })
+        .andWhere("schedule.date >= :startOfDay", { startOfDay })
+        .andWhere("schedule.date <= :endOfDay", { endOfDay })
+        .andWhere("schedule.deletedAt IS NULL")
+        .getRawOne();
+
+      newIndexDay = (maxIndexDay?.max || 0) + 1;
+    }
+
     return this.scheduleRepository.save({
       ...schedule,
       ...updateScheduleDto,
+      indexDay: newIndexDay,
     });
   }
 }
