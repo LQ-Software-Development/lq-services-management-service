@@ -8,6 +8,7 @@ import {
   Put,
   Query,
   UseGuards,
+  Headers,
 } from "@nestjs/common";
 import { CreateScheduleDto } from "./dto/create-schedule.dto";
 import { UpdateScheduleDto } from "./dto/update-schedule.dto";
@@ -31,7 +32,7 @@ export class SchedulesController {
     private readonly fetchScheduleService: FetchScheduleService,
     private readonly updateScheduleService: UpdateScheduleService,
     private readonly deleteClientSchedulesService: DeleteClientSchedulesService,
-  ) {}
+  ) { }
 
   @Post()
   create(@Body() createScheduleDto: CreateScheduleDto) {
@@ -85,8 +86,9 @@ export class SchedulesController {
   async update(
     @Param("id") id: string,
     @Body() updateScheduleDto: UpdateScheduleDto,
+    @Headers("authorization") bearerToken?: string,
   ) {
-    return this.updateScheduleService.execute({ id, updateScheduleDto });
+    return this.updateScheduleService.execute({ id, updateScheduleDto, bearerToken });
   }
 
   @Delete(":id")

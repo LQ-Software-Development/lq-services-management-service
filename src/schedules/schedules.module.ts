@@ -9,6 +9,7 @@ import { FetchScheduleService } from "./services/fetch-schedule.service";
 import { UpdateScheduleService } from "./services/update-schedule.service";
 import { DeleteClientSchedulesService } from "./services/delete-client-schedules.service";
 import { FinancialApiProvider } from "src/providers/financial-api.provider";
+import { HrApiProvider } from "src/providers/hr-api.provider";
 import { Schedule } from "src/models/schedule.entity";
 import { ScheduleUpdateGuard } from "../guards/schedule-update.guard";
 
@@ -28,6 +29,7 @@ import { ScheduleUpdateGuard } from "../guards/schedule-update.guard";
     FetchScheduleService,
     UpdateScheduleService,
     FinancialApiProvider,
+    HrApiProvider,
     DeleteClientSchedulesService,
     ScheduleUpdateGuard,
   ],
