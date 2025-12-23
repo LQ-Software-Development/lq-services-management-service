@@ -14,7 +14,7 @@ export class UpdateScheduleService {
     @InjectRepository(Schedule)
     private readonly scheduleRepository: Repository<Schedule>,
     private readonly hrApiProvider: HrApiProvider,
-  ) {}
+  ) { }
 
   async execute({
     id,

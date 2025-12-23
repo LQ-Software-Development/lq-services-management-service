@@ -10,7 +10,7 @@ export class HrApiProvider {
   constructor() {
     if (!process.env.HR_API_URL) {
       this.logger.warn('HR_API_URL not configured, HR API calls will be skipped');
-      this.stopTimeLogByService = async () => {};
+      this.stopTimeLogByService = async () => { };
       return;
     }
 

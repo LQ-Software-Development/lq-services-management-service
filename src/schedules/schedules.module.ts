@@ -34,4 +34,4 @@ import { ScheduleUpdateGuard } from "../guards/schedule-update.guard";
     ScheduleUpdateGuard,
   ],
 })
-export class SchedulesModule {}
+export class SchedulesModule { }
