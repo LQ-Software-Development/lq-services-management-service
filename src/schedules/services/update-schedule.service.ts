@@ -62,7 +62,7 @@ export class UpdateScheduleService {
     const newStatus = updateScheduleDto.status?.toLowerCase();
 
     console.log(
-      `[HR Integration Debug] Schedule ${id}: previousStatus="${previousStatus}", newStatus="${newStatus}", doneStatus="${this.doneStatus}", hasToken=${!!bearerToken}, serviceId="${schedule.serviceId}"`,
+      `[HR Integration Debug] Schedule ${id}: previousStatus="${previousStatus}", newStatus="${newStatus}", doneStatus="${this.doneStatus}", hasToken=${!!bearerToken}`,
     );
 
     const savedSchedule = await this.scheduleRepository.save({
@@ -75,14 +75,13 @@ export class UpdateScheduleService {
       this.doneStatus &&
       bearerToken &&
       previousStatus !== this.doneStatus &&
-      newStatus === this.doneStatus &&
-      savedSchedule.serviceId
+      newStatus === this.doneStatus
     ) {
       this.logger.log(
         `Status transitioned to "${this.doneStatus}" for schedule ${id}, calling HR API`,
       );
       await this.hrApiProvider.stopTimeLogByService(
-        savedSchedule.serviceId,
+        id,
         bearerToken,
       );
     } else {
