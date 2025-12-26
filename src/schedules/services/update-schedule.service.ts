@@ -61,6 +61,10 @@ export class UpdateScheduleService {
     const previousStatus = schedule.status?.toLowerCase();
     const newStatus = updateScheduleDto.status?.toLowerCase();
 
+    console.log(
+      `[HR Integration Debug] Schedule ${id}: previousStatus="${previousStatus}", newStatus="${newStatus}", doneStatus="${this.doneStatus}", hasToken=${!!bearerToken}, serviceId="${schedule.serviceId}"`,
+    );
+
     const savedSchedule = await this.scheduleRepository.save({
       ...schedule,
       ...updateScheduleDto,
@@ -80,6 +84,10 @@ export class UpdateScheduleService {
       await this.hrApiProvider.stopTimeLogByService(
         savedSchedule.serviceId,
         bearerToken,
+      );
+    } else {
+      this.logger.log(
+        `[HR Integration Debug] Skipping HR API call - conditions not met`,
       );
     }
 
